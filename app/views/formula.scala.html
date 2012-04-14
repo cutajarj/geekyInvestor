@@ -1,0 +1,43 @@
+
+<form>
+    <label>Y =
+        <span class="small">enter your formula</span>
+    </label>
+    <input type="text" name="equation" id="equation"/>
+    <input id="colorpicker" class="color {valueElement:'yColorValue'}"/>
+    <input name="yColorValue" type="hidden" id="yColorValue"/>
+
+    <div style="padding:2px 0px">
+        <ul class="pureCssMenu pureCssMenum">
+            <li class="pureCssMenui0"><a class="pureCssMenui0" href="#"><span>Examples</span></a>
+                <ul class="pureCssMenum">
+                    <li class="pureCssMenui"><a class="pureCssMenui" href="#"
+                                                onclick="example('GOOG/GOOG.EPSTTM','Google\s Profit Earnings Ratio');">Google's PE Ratio</a>
+                    </li>
+                    <li class="pureCssMenui"><a class="pureCssMenui" href="#"
+                                                onclick="example('^GSPC*USDEUR','S&amp;P 500 in euros');">S&amp;P 500 in euros</a></li>
+                    <li class="pureCssMenui"><a class="pureCssMenui" href="#"
+                                                onclick="example('GE*USDGBP','General Electric in GBP');">General Electric in GBP</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <div id="optionsSwitch"><a id="hideshow" href="">options</a></div>
+    <div id="options">
+        <label style="clear:both;">From
+            <span class="small">start date</span>
+        </label>
+        <input name="dateFrom" id="datepickerFrom" type="text" style="width:80px;"/>
+        <label style="width:75px;">To
+            <span style="width:75px;" class="small">end date</span>
+        </label>
+        <input name="dateTo" id="datepickerTo" type="text" style="width:80px;"/>
+
+        <label style="clear:both">Title
+            <span class="small">chart name</span>
+        </label>
+        <input name="title" id="title" type="text" style="width:250px;"/>
+    </div>
+    <button type="submit">Plot Chart</button>
+</form>
