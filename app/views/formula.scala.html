@@ -1,11 +1,22 @@
+@(chartRequest:Form[controllers.Application.ChartRequest],errorMessages:Seq[String])
 
-<form>
+@import helper._
+
+
+<form method="POST" action="@routes.Application.chart" >
+    @errorMessages.map { errorMessage =>
+        <div style="margin:0px 0px 0px 150px; color:red; clear:both;">@errorMessage</div>
+    }
+    @chartRequest.errors.map { errorMessage =>
+        <div style="margin:0px 0px 0px 150px; color:red; clear:both;">@errorMessage.message</div>
+    }
     <label>Y =
-        <span class="small">enter your formula</span>
+        <span class="small">enter your expression</span>
     </label>
-    <input type="text" name="equation" id="equation"/>
+
+    <input type="text" name="equation" id="equation" @chartRequest("equation").value.map{v=> value="@v" }/>
     <input id="colorpicker" class="color {valueElement:'yColorValue'}"/>
-    <input name="yColorValue" type="hidden" id="yColorValue"/>
+    <input name="yColorValue" type="hidden" id="yColorValue" @chartRequest("yColorValue").value.map{v=> value="@v" }/>
 
     <div style="padding:2px 0px">
         <ul class="pureCssMenu pureCssMenum">
@@ -28,16 +39,16 @@
         <label style="clear:both;">From
             <span class="small">start date</span>
         </label>
-        <input name="dateFrom" id="datepickerFrom" type="text" style="width:80px;"/>
+        <input name="dateFrom" id="datepickerFrom" type="text" style="width:80px;" @chartRequest("dateFrom").value.map{v=> value="@v" }/>
         <label style="width:75px;">To
             <span style="width:75px;" class="small">end date</span>
         </label>
-        <input name="dateTo" id="datepickerTo" type="text" style="width:80px;"/>
+        <input name="dateTo" id="datepickerTo" type="text" style="width:80px;" @chartRequest("dateTo").value.map{v=> value="@v" }/>
 
         <label style="clear:both">Title
             <span class="small">chart name</span>
         </label>
-        <input name="title" id="title" type="text" style="width:250px;"/>
+        <input name="title" id="title" type="text" style="width:250px;" @chartRequest("title").value.map{v=> value="@v" }/>
     </div>
     <button type="submit">Plot Chart</button>
 </form>

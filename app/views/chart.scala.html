@@ -1,0 +1,44 @@
+@(title:String,chartRequest:Form[controllers.Application.ChartRequest],chartResult:services.EquationResult,errorMessages:Seq[String]=Nil)
+
+@import services.EquationResult
+
+@mainChart(title) {
+
+<div style="margin: 0 auto; min-height: 100%; width: 1200px;">
+
+    <div id="content" style="width:1200px;">
+        <div style="float:left;"><img src="@routes.Assets.at("images/chartnerd.png")"/></div>
+
+        <div style="width:1000px;float:left;">
+            <div style="margin:10px 8px 8px 15px;"><h1>@chartRequest("title").value.map{v=> @v }</h1></div>
+
+            <div id="graph_area1"
+                 style="float:left;width:960px;height:380px;border-width:0px;"></div>
+
+            <script type="text/javascript">
+                $(function () {
+                    var plotData = [
+                        @chartResult.result.map { x=>
+                            [@x._1,@x._2]
+                        }.mkString(", ")
+                    ];
+
+                    $.plot($("#graph_area1"), [ {
+                        data: plotData,
+                        @chartRequest("yColorValue").value.map{v=> color: "#@v" }
+                    }],{
+                        xaxis: { mode: "time" }
+                    });
+                });
+            </script>
+
+            <div id="stylized">
+                @formula(chartRequest,errorMessages)
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+}

@@ -30,7 +30,7 @@ object StatServiceImpl {
   val LOG = LoggerFactory.getLogger(classOf[StatService])
 }
 
-class StatServiceImpl(val statDAO: StatDAO,val equationParser: ExprParser) extends StatService{
+class StatServiceImpl(val statDAO: StatDAO) extends StatService{
 
   val symbolList = List[String]("RIO.L", "GOOG", "CCL.L", "VOD.L")
   val typesOnline = List[String]("ADJCLOSE", "CLOSE", "OPEN", "HIGH", "LOW")

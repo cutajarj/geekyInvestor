@@ -2,6 +2,7 @@ package parser
 
 import scala.util.parsing.combinator.syntactical._
 
+
 /**
  * Created by IntelliJ IDEA.
  * User: James Cutajar
@@ -10,7 +11,7 @@ import scala.util.parsing.combinator.syntactical._
  * To change this template use File | Settings | File Templates.
  */
 
-class ExprParser extends StandardTokenParsers {
+  class ExprParser extends StandardTokenParsers {
   override val lexical = new ExprLexical
   lexical.delimiters ++= List("+", "-", "*", "/", "(", ")")
 

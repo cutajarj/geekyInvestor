@@ -1,4 +1,4 @@
-@(title:String)
+@(title:String,chartRequest:Form[controllers.Application.ChartRequest],errorMessages:Seq[String]=Nil)
 
 @main(title) {
     
@@ -9,7 +9,7 @@
         <div id="header" style="width:855px;margin-left:auto;margin-right:auto;"><img src="@routes.Assets.at("images/title.png")" alt="The Wall Street Nerd"/></div>
 
         <div id="stylized" class="mainPageEquationForm">
-            @formula()
+            @formula(chartRequest,errorMessages)
 	    </div>
     </div>
 

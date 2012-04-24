@@ -2,6 +2,8 @@ package persistance
 
 import model.Stat
 import java.util.Date
+import com.mongodb.{DBObject, BasicDBObject, DB}
+
 /*import com.google.appengine.api.datastore.Query.SortDirection
 import com.google.appengine.api.datastore._*/
 import org.slf4j.LoggerFactory
@@ -35,40 +37,39 @@ object StatDAOImpl {
 
 import StatDAOImpl._
 
-class StatDAOImpl extends StatDAO {
+class StatDAOImpl(val mongoDB:DB) extends StatDAO {
 
   def save(stat: Stat): Stat = {
     LOG.debug("Saving {}", stat)
-    /*val datastore = DatastoreServiceFactory.getDatastoreService
-    val entity = new Entity("Stat")
+    val fundamentalColl = mongoDB.getCollection("fundamentalColl")
+    val entity = new BasicDBObject()
 
-    entity.setProperty("statType", stat.statType)
-    entity.setProperty("symbol", stat.symbol)
-    entity.setProperty("value", stat.value)
-    entity.setProperty("timeStamp", stat.timeStamp)
-    entity.setProperty("value", stat.value)
+    entity.put("t", stat.statType)
+    entity.put("s", stat.symbol)
+    entity.put("v", stat.value)
+    //TODO put this as a long
+    entity.put("ts", stat.timeStamp)
 
-    datastore.put(entity)
+    fundamentalColl.insert(entity)
 
-    stat.copy(key = Some(entity.getKey))*/
-    null
+    stat.copy(key = Some(entity.get("_id").toString))
   }
 
   def saveAll(stats: Iterable[Stat]) {
     LOG.debug("Saving all")
-    /*val datastore = DatastoreServiceFactory.getDatastoreService
-    val entities: java.lang.Iterable[Entity] = asJavaIterable(stats.map {
+    val fundamentalColl = mongoDB.getCollection("fundamentalColl")
+    val entities: java.util.List[DBObject] = stats.map {
       stat =>
-        val entity = new Entity("Stat")
-        entity.setProperty("statType", stat.statType)
-        entity.setProperty("symbol", stat.symbol)
-        entity.setProperty("value", stat.value)
-        entity.setProperty("timeStamp", stat.timeStamp)
-        entity.setProperty("value", stat.value)
-        entity
-    })
-    datastore.put(entities) */
-    null
+        val entity = new BasicDBObject()
+        entity.put("t", stat.statType)
+        entity.put("s", stat.symbol)
+        entity.put("v", stat.value)
+        //TODO put this as a long
+        entity.put("ts", stat.timeStamp)
+
+        entity.asInstanceOf[DBObject]
+    }.toList
+    fundamentalColl.insert(entities)
   }
 
 
@@ -109,31 +110,30 @@ class StatDAOImpl extends StatDAO {
 
   def load(t: Option[String] = None, s: Option[String] = None): Iterable[Stat] = {
     LOG.debug("Loading {}.{}", s, t)
-    /*val dataStore = DatastoreServiceFactory.getDatastoreService
-    val query = new Query("Stat")
-    t.map(query.addFilter("statType", Query.FilterOperator.EQUAL, _))
-    s.map(query.addFilter("symbol", Query.FilterOperator.EQUAL, _))
-    query.addSort("timeStamp")
-    val pq = dataStore.prepare(query)
+    val fundamentalColl = mongoDB.getCollection("fundamentalColl")
+    val search = new BasicDBObject()
+    t.map(search.put("t", _))
+    s.map(search.put("s", _))
 
-    val stats = asStats(pq.asIterable())
+    val result = fundamentalColl.find(search)
+
+    val stats = asStats(result)
 
     if (stats.nonEmpty)
       stats
     else
       throw new IllegalArgumentException("Unable to find symbol: %s.%s".format(s.getOrElse(""), t.getOrElse("")))
-      */
-    null
   }
 
-/*  private[this] def asStats(e: Iterable[Entity]) = e.map {
+  private[this] def asStats(e: Iterable[DBObject]) = e.map {
     entity =>
-      new Stat(Some(entity.getKey),
-        entity.getProperty("value").asInstanceOf[Double],
-        entity.getProperty("timeStamp").asInstanceOf[Date],
-        entity.getProperty("statType").toString,
-        entity.getProperty("symbol").toString)
-  }*/
+      new Stat(Some(entity.get("_id").toString),
+        entity.get("v").asInstanceOf[Double],
+        //TODO put this as a long
+        entity.get("ts").asInstanceOf[Date],
+        entity.get("t").toString,
+        entity.get("s").toString)
+  }
 
 }
 

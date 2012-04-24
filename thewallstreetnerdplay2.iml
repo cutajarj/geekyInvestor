@@ -412,6 +412,15 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/javastuff/play-2.0/repository/cache/org.mongodb/mongo-java-driver/jars/mongo-java-driver-2.7.3.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
     <orderEntry type="module-library" scope="TEST">
       <library>
         <CLASSES>
@@ -794,6 +803,15 @@
       <library>
         <CLASSES>
           <root url="jar://C:/javastuff/play-2.0/repository/local/net.sf.ehcache/ehcache-core/2.5.0/jars/ehcache-core.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" scope="TEST">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/javastuff/play-2.0/repository/cache/org.mongodb/mongo-java-driver/jars/mongo-java-driver-2.7.3.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
