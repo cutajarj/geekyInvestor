@@ -6,6 +6,7 @@ import com.mongodb.{DBObject, BasicDBObject, DB}
 
 /*import com.google.appengine.api.datastore.Query.SortDirection
 import com.google.appengine.api.datastore._*/
+
 import org.slf4j.LoggerFactory
 import collection.JavaConversions._
 
@@ -23,6 +24,8 @@ trait StatDAO {
 
   def saveAll(stats: Iterable[Stat])
 
+  def deleteAll()
+
   def update(stat: Stat)
 
   def loadLatest(t: String, s: String): Stat
@@ -37,7 +40,7 @@ object StatDAOImpl {
 
 import StatDAOImpl._
 
-class StatDAOImpl(val mongoDB:DB) extends StatDAO {
+class StatDAOImpl(val mongoDB: DB) extends StatDAO {
 
   def save(stat: Stat): Stat = {
     LOG.debug("Saving {}", stat)
@@ -47,8 +50,7 @@ class StatDAOImpl(val mongoDB:DB) extends StatDAO {
     entity.put("t", stat.statType)
     entity.put("s", stat.symbol)
     entity.put("v", stat.value)
-    //TODO put this as a long
-    entity.put("ts", stat.timeStamp)
+    entity.put("ts", stat.timeStamp.getTime)
 
     fundamentalColl.insert(entity)
 
@@ -58,18 +60,20 @@ class StatDAOImpl(val mongoDB:DB) extends StatDAO {
   def saveAll(stats: Iterable[Stat]) {
     LOG.debug("Saving all")
     val fundamentalColl = mongoDB.getCollection("fundamentalColl")
-    val entities: java.util.List[DBObject] = stats.map {
-      stat =>
-        val entity = new BasicDBObject()
-        entity.put("t", stat.statType)
-        entity.put("s", stat.symbol)
-        entity.put("v", stat.value)
-        //TODO put this as a long
-        entity.put("ts", stat.timeStamp)
+    val entities = stats.map {stat =>
+      val entity = new BasicDBObject()
+      entity.put("t", stat.statType)
+      entity.put("s", stat.symbol)
+      entity.put("v", stat.value)
+      entity.put("ts", stat.timeStamp.getTime)
 
-        entity.asInstanceOf[DBObject]
+      entity.asInstanceOf[DBObject]
     }.toList
-    fundamentalColl.insert(entities)
+
+    entities.grouped(5000).foreach {listOfEntities =>
+      fundamentalColl.insert(listOfEntities)
+    }
+
   }
 
 
@@ -125,12 +129,17 @@ class StatDAOImpl(val mongoDB:DB) extends StatDAO {
       throw new IllegalArgumentException("Unable to find symbol: %s.%s".format(s.getOrElse(""), t.getOrElse("")))
   }
 
+  def deleteAll() {
+    LOG.debug("Deleting all")
+    val fundamentalColl = mongoDB.getCollection("fundamentalColl")
+    fundamentalColl.remove(new BasicDBObject())
+  }
+
   private[this] def asStats(e: Iterable[DBObject]) = e.map {
     entity =>
       new Stat(Some(entity.get("_id").toString),
         entity.get("v").asInstanceOf[Double],
-        //TODO put this as a long
-        entity.get("ts").asInstanceOf[Date],
+        new Date(entity.get("ts").asInstanceOf[Long]),
         entity.get("t").toString,
         entity.get("s").toString)
   }

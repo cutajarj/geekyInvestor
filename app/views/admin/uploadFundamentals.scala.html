@@ -4,10 +4,10 @@
     <div>
         Current time is <span id="time">[Whatever it is, who cares anyway?]</span>
     </div>
-    Format your input in: SYMBOL,TYPE,VALUE,DATE
-    Upload text:<br/>
-    <form method="POST" action="@routes.Admin.postFundamentals">
-        <textarea name="fundamental" style="width: 500px; height: 160px;"></textarea><br />
+    Format your input in: SYMBOL,TYPE,VALUE,DATE(MM-dd-yyyy)
+    Upload file:<br/>
+    <form method="POST" action="@routes.Admin.postFundamentals" enctype="multipart/form-data">
+        <input type="file" name="fundamentals">
         <input type="submit" />
     </form>
     </p>

@@ -3,13 +3,15 @@
 # ~~~~
 
 # Home page
-GET     /                           controllers.Application.index
-POST    /postChart                  controllers.Application.chart
+GET     /                                   controllers.Application.index
+POST    /postChart                          controllers.Application.chart
 
-GET     /admin                      controllers.Admin.index
-GET     /admin/updateFundamentals   controllers.Admin.updateFundamentals
-GET     /admin/uploadFundamentals   controllers.Admin.uploadFundamentals
-POST    /admin/postFundamentals     controllers.Admin.postFundamentals
+GET     /admin                              controllers.Admin.index
+GET     /admin/updateFundamentals           controllers.Admin.updateFundamentals
+GET     /admin/uploadFundamentals           controllers.Admin.uploadFundamentals
+GET     /admin/clearAllFundamentals         controllers.Admin.clearAllFundamentals
+POST    /admin/postFundamentals             controllers.Admin.postFundamentals
+POST     /admin/postClearAllFundamentals    controllers.Admin.postClearAllFundamentals
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

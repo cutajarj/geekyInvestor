@@ -24,7 +24,7 @@ revisit stats service, distinction bt on/offline should be made on a list, onlin
 online reading of not just adjclose - 2hr
 div by zero during eq workout should leave null in series - 2hr
 //compilation error on first page - 2hr
-form validation - 2hr
+//form validation - 2hr
 check loading of symbols/stats - 2hr
 //screen scrapping for ycharts - 5hr
 daily update script to read mrq - 5hr
@@ -33,6 +33,8 @@ daily update script to read mrq - 5hr
 How to use, About, Contact
 //Check why indexes don't work in dev mode? - 1 hr
 Check on other browsers - 2hr
+admin pages clear all fundamentals - 1hr
+admin pages fix upload to do chunk - 2hr
 
 ##Future features
 indexes - 2hr high
