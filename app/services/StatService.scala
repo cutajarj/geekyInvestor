@@ -20,9 +20,11 @@ import java.net.{HttpURLConnection, URL}
  * To change this template use File | Settings | File Templates.
  */
 
-trait StatService{
+trait StatService {
   def updateTodaysStats(): Seq[Stat]
+
   def buildStockStatsMap(stocks: Set[EStock], fromDate: LocalDate, toDate: LocalDate): Map[String, TreeMap[Long, Double]]
+
   def buildCurrencyStatsMap(cs: Set[ECurrency], fromDate: LocalDate, toDate: LocalDate): Map[String, TreeMap[Long, Double]]
 }
 
@@ -30,10 +32,10 @@ object StatServiceImpl {
   val LOG = LoggerFactory.getLogger(classOf[StatService])
 }
 
-class StatServiceImpl(val statDAO: StatDAO) extends StatService{
+class StatServiceImpl(val statDAO: StatDAO) extends StatService {
 
   val symbolList = List[String]("RIO.L", "GOOG", "CCL.L", "VOD.L")
-  val typesOnline = List[String]("ADJCLOSE", "CLOSE", "OPEN", "HIGH", "LOW")
+  val typesOnline = List[String]("ADJCLOSE", "CLOSE", "OPEN", "HIGH", "LOW", "VOLUME")
 
   override def updateTodaysStats(): Seq[Stat] = {
     LOG.info("updating stats")
@@ -159,11 +161,11 @@ class StatServiceImpl(val statDAO: StatDAO) extends StatService{
       case HttpURLConnection.HTTP_OK =>
         val bufferedSource = io.Source.fromInputStream(connection.getInputStream)
         val sdf = new SimpleDateFormat("yyyy-MM-dd")
-        bufferedSource.getLines().drop(1).flatMap { line =>
+        bufferedSource.getLines().drop(1).flatMap {line =>
           line.split(",").toList match {
             case d :: o :: h :: l :: c :: v :: cAdj :: Nil =>
               try {
-                Some(Stat(value = cAdj.toDouble, timeStamp = sdf.parse(d), statType = "ADJCLOSE", symbol = symbol))
+                Some(extractSymbolFromOnlineRecord(statType, symbol, d, o, h, l, c, cAdj, v, sdf))
               }
               catch {
                 case e => throw new IllegalStateException(e)
@@ -175,6 +177,23 @@ class StatServiceImpl(val statDAO: StatDAO) extends StatService{
       case _ =>
         throw new IllegalArgumentException("Cannot find symbol %s".format(symbol))
     }
+  }
+
+  private[this] def extractSymbolFromOnlineRecord(stype: String, symbol: String, date: String, open: String,
+                                                  high: String, low: String, close: String, cAdj: String, volume: String, sdf: SimpleDateFormat): Stat = stype match {
+    case "ADJCLOSE" =>
+      Stat(value = cAdj.toDouble, timeStamp = sdf.parse(date), statType = "ADJCLOSE", symbol = symbol)
+    case "CLOSE" =>
+      Stat(value = close.toDouble, timeStamp = sdf.parse(date), statType = "CLOSE", symbol = symbol)
+    case "OPEN" =>
+      Stat(value = open.toDouble, timeStamp = sdf.parse(date), statType = "OPEN", symbol = symbol)
+    case "LOW" =>
+      Stat(value = low.toDouble, timeStamp = sdf.parse(date), statType = "LOW", symbol = symbol)
+    case "HIGH" =>
+      Stat(value = high.toDouble, timeStamp = sdf.parse(date), statType = "HIGH", symbol = symbol)
+    case "VOLUME" =>
+      Stat(value = volume.toDouble, timeStamp = sdf.parse(date), statType = "VOLUME", symbol = symbol)
+    case _ => throw new IllegalStateException()
   }
 
 
