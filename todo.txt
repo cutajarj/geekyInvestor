@@ -20,28 +20,33 @@
 //hide/show options on main page - 3hr
 //.error handling - 1 hr
 //update google app engine version  - .5hr
-revisit stats service, distinction bt on/offline should be made on a list, online in a DAO, tree created at DAO, - 5hr
-online reading of not just adjclose - 2hr
-div by zero during eq workout should leave null in series - 2hr
 //compilation error on first page - 2hr
 //form validation - 2hr
-check loading of symbols/stats - 2hr
-//screen scrapping for ycharts - 5hr
-daily update script to read mrq - 5hr
 //override current quarter if values are different in daily update script - 1hr
 //buy nerd pic - 2hr
-How to use, About, Contact
 //Check why indexes don't work in dev mode? - 1 hr
+//admin pages clear all fundamentals - 1hr
+//admin pages fix upload to do chunk - 2hr
+//screen scrapping for ycharts - 5hr
+//online reading of not just adjclose - 2hr
+revisit stats service, distinction bt on/offline should be made on a list, online in a DAO, tree created at DAO, - 5hr
+div by zero during eq workout should leave null in series - 2hr
+check loading of symbols/stats - 2hr
+daily update script to read mrq - 5hr
+How to use, About, Contact
 Check on other browsers - 2hr
-admin pages clear all fundamentals - 1hr
-admin pages fix upload to do chunk - 2hr
+//remove println
+//check logging
+//auto complete for stock symbols - 5hr
+//auto complete for stock types - 2 hr
+//auto complete for currencies - 2 hr
+
 
 ##Future features
 indexes - 2hr high
 -- release 1.0
 multiple charts in one - high
 make CHF|JPY|AUD|CAD work - high
-auto complete - high
 get historical currencies + daily update script for currencies- high
 functions - med
 make chart page as a rest service - med

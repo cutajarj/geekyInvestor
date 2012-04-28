@@ -2,6 +2,87 @@
 
 @import helper._
 
+<script type="text/javascript">
+    $(function() {
+        function split( val ) {
+        return val.split( /([\(|\)|\+|\-|\*|\/]\s*)/ );
+    }
+    function extractSelected( term ) {
+        var pos = getCaret(document.getElementById('equation'));
+        var allTokens = split( term );
+        var token = allTokens.shift();
+        var current = token.length;
+        while(current < pos) {
+            token = allTokens.shift();
+            current+=token.length;
+        }
+        return token;
+    }
+    function getCaret(el) {
+        if (el.selectionStart) {
+            return el.selectionStart;
+        } else if (document.selection) {
+            el.focus();
+            if (r == null) {
+                return 0;
+            }
+            var re = el.createTextRange(),
+            rc = re.duplicate();
+            re.moveToBookmark(r.getBookmark());
+            rc.setEndPoint('EndToStart', re);
+            return rc.text.length;
+        }
+        return 0;
+    }
+
+    $( "#equation" )
+        .bind( "keydown", function( event ) {
+            if ( event.keyCode === $.ui.keyCode.TAB && $( this ).data( "autocomplete" ).menu.active ) {
+                event.preventDefault();
+            }
+        })
+        .autocomplete({
+            source: function( request, response ) {
+                if (request.term.indexOf(".")>=0){
+                    $.getJSON( "autoCompleteExpressionWtType", {
+                    term: extractSelected( request.term )
+                    }, response );
+                }
+                else{
+                    $.getJSON( "autoCompleteExpression", {
+                    term: extractSelected( request.term )
+                    }, response );
+                }
+            },
+            search: function() {
+                // custom minLength
+                var term = extractSelected( this.value );
+                if ( term.length < 2 ) {
+                    return false;
+                }
+            },
+            focus: function() {
+                // prevent value inserted on focus
+                return false;
+            },
+            select: function( event, ui ) {
+                var allTokens = split( this.value );
+                var finalTokens = Array( 0 );
+                var pos = getCaret(this);
+                var token = allTokens.shift();
+                var current = token.length;
+                while(current < pos){
+                    finalTokens.push(token);
+                    token = allTokens.shift();
+                    current+=token.length;
+                }
+                finalTokens.push(ui.item.value);
+                this.value = finalTokens.join("") + allTokens.join("");
+                return false;
+            }
+        });
+    });
+</script>
 
 <form method="POST" action="@routes.Application.chart" >
     @errorMessages.map { errorMessage =>
@@ -50,5 +131,5 @@
         </label>
         <input name="title" id="title" type="text" style="width:250px;" @chartRequest("title").value.map{v=> value="@v" }/>
     </div>
-    <button type="submit">Plot Chart</button>
+    <button type="submit">Show</button>
 </form>

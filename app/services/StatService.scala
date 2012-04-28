@@ -45,7 +45,6 @@ class StatServiceImpl(val statDAO: StatDAO) extends StatService {
     val bufferedSource = io.Source.fromURL(url)
     val stats = bufferedSource.getLines().map {
       line =>
-        println(line)
         line.split(",").toList match {
           case s :: e :: Nil => Stat(value = e.toDouble, timeStamp = new Date, statType = "EPS", symbol = s)
           case _ =>
@@ -142,7 +141,7 @@ class StatServiceImpl(val statDAO: StatDAO) extends StatService {
   }
 
   private[this] def readOnlinePrices(symbol: String, statType: String, from: LocalDate, to: LocalDate): Iterator[Stat] = {
-    println("Checking historical prices from yahoo")
+    LOG.debug("Checking historical prices from yahoo")
     val urlStr = "http://ichart.yahoo.com/table.csv?s=%s&a=%s&b=%s&c=%s&d=%s&e=%s&f=%s&g=d&ignore=.csv".format(
       symbol,
       from.getMonthOfYear - 1,
@@ -152,7 +151,7 @@ class StatServiceImpl(val statDAO: StatDAO) extends StatService {
       to.getDayOfMonth,
       to.getYear
     )
-    println("Getting %s", urlStr)
+    LOG.info("Getting {}", urlStr)
     val url = new URL(urlStr)
     val connection = url.openConnection().asInstanceOf[HttpURLConnection]
     connection.setConnectTimeout(60000)

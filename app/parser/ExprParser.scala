@@ -78,7 +78,6 @@ import scala.util.parsing.combinator.syntactical._
   def apply(s: String): Expr = {
     parse(s) match {
       case Success(tree, _) =>
-        println(tree)
         tree
       case e: NoSuccess =>
         throw new IllegalArgumentException("Bad syntax: " + s)

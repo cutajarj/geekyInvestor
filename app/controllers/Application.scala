@@ -1,6 +1,7 @@
 package controllers
 
 import play.api._
+import libs.json.Json._
 import data._
 import data.Forms._
 import mvc._
@@ -39,37 +40,53 @@ object Application extends Controller {
       "title" -> text
     )
       (
-        (equation, yColorValue, dateFrom, dateTo, title) => ChartRequest(equation, yColorValue,
-          LocalDate.parse(dateFrom, DateTimeFormat.forPattern("MM/dd/yyyy")),
-          LocalDate.parse(dateTo, DateTimeFormat.forPattern("MM/dd/yyyy")), title)
+        (equation, yColorValue, dateFrom, dateTo, title) =>
+          ChartRequest(equation, yColorValue,
+            LocalDate.parse(dateFrom, DateTimeFormat.forPattern("MM/dd/yyyy")),
+            LocalDate.parse(dateTo, DateTimeFormat.forPattern("MM/dd/yyyy")), title)
       )
       (
-        (chartRequest: ChartRequest) => Some((chartRequest.equation, chartRequest.yColorValue,
-          chartRequest.dateFrom.toString(DateTimeFormat.forPattern("MM/dd/yyyy")),
-          chartRequest.dateTo.toString(DateTimeFormat.forPattern("MM/dd/yyyy")), chartRequest.title))
+        (chartRequest: ChartRequest) =>
+          Some((chartRequest.equation, chartRequest.yColorValue,
+            chartRequest.dateFrom.toString(DateTimeFormat.forPattern("MM/dd/yyyy")),
+            chartRequest.dateTo.toString(DateTimeFormat.forPattern("MM/dd/yyyy")), chartRequest.title))
       ).verifying("From date must be before To date", {
       chartRequest => chartRequest.dateFrom.isBefore(chartRequest.dateTo)
     })
   )
 
 
-  def chart = Action { implicit request =>
-      chartForm.bindFromRequest.fold(
-        formWithErrors => BadRequest(views.html.index("The Wall Street Nerd", formWithErrors)),
-        chartRequest => {
-          LOG.debug("Equation: {}", chartRequest.equation)
-          try {
-            val eq = equationService.buildEquation(chartRequest.equation)
-            val eqResult = equationService.workOut(eq, chartRequest.dateFrom, chartRequest.dateTo)
-            Ok(views.html.chart("The Wall Street Nerd %s".format(chartRequest.title), chartForm.fill(chartRequest), eqResult, eqResult.messages))
-          }
-          catch {
-            case e: IllegalArgumentException =>
-              LOG.error("Error: {}", e.getMessage)
-              BadRequest(views.html.index("The Wall Street Nerd", chartForm.fill(chartRequest), errorMessages = Seq[String](e.getMessage)))
-          }
+  def chart = Action {implicit request =>
+    chartForm.bindFromRequest.fold(
+      formWithErrors => BadRequest(views.html.index("The Wall Street Nerd", formWithErrors)),
+      chartRequest => {
+        LOG.debug("Equation: {}", chartRequest.equation)
+        try {
+          val eq = equationService.buildEquation(chartRequest.equation)
+          val eqResult = equationService.workOut(eq, chartRequest.dateFrom, chartRequest.dateTo)
+          Ok(views.html.chart("The Wall Street Nerd %s".format(chartRequest.title), chartForm.fill(chartRequest), eqResult, eqResult.messages))
         }
+        catch {
+          case e: IllegalArgumentException =>
+            LOG.error("Error: {}", e.getMessage)
+            BadRequest(views.html.index("The Wall Street Nerd", chartForm.fill(chartRequest), errorMessages = Seq[String](e.getMessage)))
+        }
+      }
     )
+  }
+
+  def autoCompleteExpression(term:String) = Action {request =>
+    val matches = autoComplete.findMatching(term).map(x=> Map("id"->x.name,"label"->(x.name+": "+x.desc),"value"->x.name))
+    Ok(toJson(matches))
+  }
+
+  def autoCompleteExpressionWtType(term:String) = Action {request =>
+    val matches = autoComplete.findMatchingWtType(term).map{ x=>
+      val id =  x._1.name+"."+x._2.name
+      val label = id+": "+x._1.desc+" "+x._2.desc
+      Map("id"->id,"label"->label,"value"->id)
+    }
+    Ok(toJson(matches))
   }
 
 }

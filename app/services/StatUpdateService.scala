@@ -31,7 +31,7 @@ class StatUpdateServiceImpl(val symbolDAO: SymbolDAO,val statDAO: StatDAO) {
 
   def updateStock(updateLatest: Boolean): Seq[(String, Double, Double, LocalDate)] = {
     val allSymbols = symbolDAO.loadAllSymbols()
-    val allSymbolTypes = symbolDAO.loadAllStockTypes()
+    val allSymbolTypes = symbolDAO.loadAllFundamentalTypes()
     allSymbolTypes.foldLeft(Seq[(String, Double, Double, LocalDate)]()) {
       (l, t) =>
         val dataList = downloadData(allSymbols, t)

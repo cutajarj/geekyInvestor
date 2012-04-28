@@ -13,8 +13,10 @@ import org.slf4j.LoggerFactory
  */
 
 trait SymbolDAO{
-  def loadAllStockTypes(): Seq[SymbolType]
+  def loadAllFundamentalTypes(): Seq[SymbolType]
+  def loadAllTradedTypes():Seq[SymbolType]
   def loadAllSymbols(): Seq[Symbol]
+  def loadAllCurrencies(): Seq[Symbol]
 }
 
 object SymbolDAOImpl{
@@ -23,7 +25,7 @@ object SymbolDAOImpl{
 
 class SymbolDAOImpl extends SymbolDAO {
 
-  override def loadAllStockTypes(): Seq[SymbolType] = {
+  override def loadAllFundamentalTypes(): Seq[SymbolType] = {
     Seq[SymbolType](
       SymbolType("BVPS", "Book Value per share", "b4", "STOCK", (s: String) => s.toDouble),
       SymbolType("EPSTTM", "Earnings per share TTM", "e", "STOCK", (s: String) => s.toDouble),
@@ -31,6 +33,27 @@ class SymbolDAOImpl extends SymbolDAO {
       SymbolType("SO", "Shares Outstanding", "j2", "STOCK", commaDoubleConvertor)
     )
   }
+
+  override def loadAllCurrencies(): Seq[Symbol] = {
+    Seq[Symbol](
+      Symbol("USD", "US dollar", "USD", "CURRENCY"),
+      Symbol("GBP", "British pound", "GBP", "CURRENCY"),
+      Symbol("CNY", "Chinese yuan", "CNY", "CURRENCY"),
+      Symbol("BRL", "Brazil real", "BRL", "CURRENCY"),
+      Symbol("EUR", "Euro", "EUR", "CURRENCY"))
+
+  }
+
+  override def loadAllTradedTypes(): Seq[SymbolType] = {
+    Seq[SymbolType](
+      SymbolType("OPEN", "Opening Price", "OPEN", "TRADED", (s: String) => s.toDouble),
+      SymbolType("CLOSE", "Closing Price", "CLOSE", "TRADED", (s: String) => s.toDouble),
+      SymbolType("HIGH", "High Day Price", "HIGH", "TRADED", (s: String) => s.toDouble),
+      SymbolType("LOW", "Low Day Price", "LOW", "STOCK", (s: String) => s.toDouble),
+      SymbolType("VOLUME", "Volume Day", "VOLUME", "STOCK", (s: String) => s.toDouble)
+    )
+  }
+
 
   def commaDoubleConvertor(s: String): Double = s.replace(",", "").toDouble
 
