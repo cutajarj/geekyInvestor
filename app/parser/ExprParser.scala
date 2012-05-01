@@ -24,8 +24,8 @@ import scala.util.parsing.combinator.syntactical._
     //CHF|JPY|AUD|CAD
       val currency = "EUR|GBP|USD|CNY|BRL"
       val cRegex = ("(%s)(%s)".format(currency, currency)).r
-      val stockTypeRegex = "(\\w+)\\.(\\w+)".r
-      val stockOnlyRegex = "(\\w+)".r
+      val stockTypeRegex = "(\\^?\\w+)\\.(\\w+)".r
+      val stockOnlyRegex = "(\\^?\\w+)".r
       s match {
         case cRegex(from, to) => ECurrency(from, to)
         case stockTypeRegex(st, ty) => EStock(st, ty)

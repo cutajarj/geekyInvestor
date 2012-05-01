@@ -35,15 +35,15 @@ check loading of symbols/stats - 2hr
 daily update script to read mrq - 5hr
 How to use, About, Contact
 Check on other browsers - 2hr
+indexes in autocomplete - 1hr
 //remove println
 //check logging
 //auto complete for stock symbols - 5hr
 //auto complete for stock types - 2 hr
 //auto complete for currencies - 2 hr
-
+//indexes - 2hr high
 
 ##Future features
-indexes - 2hr high
 -- release 1.0
 multiple charts in one - high
 make CHF|JPY|AUD|CAD work - high

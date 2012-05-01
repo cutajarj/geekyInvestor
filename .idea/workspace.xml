@@ -2,32 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="308cb5a3-b5d6-44e9-ab09-1b02ffdafdb8" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/images/ui-anim_basic_16x16.gif" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/ant.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/services/AutoCompleteService.scala" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/jquery-1.7.2.min.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/javascripts/jquery-ui-1.8.19.custom.min.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/stylesheets/cupertino/jquery-ui-1.8.19.custom.css" />
-      <change type="DELETED" beforePath="C:\my stuff\thewallstreetnerdplay2\public\javascripts\jquery-1.7.1.min.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\my stuff\thewallstreetnerdplay2\public\javascripts\jquery-ui-1.8.18.custom.min.js" afterPath="" />
-      <change type="DELETED" beforePath="C:\my stuff\thewallstreetnerdplay2\public\stylesheets\cupertino\jquery-ui-1.8.18.custom.css" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/stylesheets/cupertino/images/ui-bg_glass_100_e4f1fb_1x400.png" afterPath="$PROJECT_DIR$/public/stylesheets/cupertino/images/ui-bg_glass_100_e4f1fb_1x400.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" afterPath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/config/AppConfig.scala" afterPath="$PROJECT_DIR$/app/config/AppConfig.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/controllers/Application.scala" afterPath="$PROJECT_DIR$/app/controllers/Application.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/parser/ExprLexical.scala" afterPath="$PROJECT_DIR$/app/parser/ExprLexical.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/parser/ExprParser.scala" afterPath="$PROJECT_DIR$/app/parser/ExprParser.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/persistance/SymbolDAO.scala" afterPath="$PROJECT_DIR$/app/persistance/SymbolDAO.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/services/StatService.scala" afterPath="$PROJECT_DIR$/app/services/StatService.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/services/StatUpdateService.scala" afterPath="$PROJECT_DIR$/app/services/StatUpdateService.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views/formula.scala.html" afterPath="$PROJECT_DIR$/app/views/formula.scala.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views/main.scala.html" afterPath="$PROJECT_DIR$/app/views/main.scala.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views/mainChart.scala.html" afterPath="$PROJECT_DIR$/app/views/mainChart.scala.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/conf/application.conf" afterPath="$PROJECT_DIR$/conf/application.conf" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/conf/routes" afterPath="$PROJECT_DIR$/conf/routes" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/thewallstreetnerdplay2.iml" afterPath="$PROJECT_DIR$/thewallstreetnerdplay2.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/todo.txt" afterPath="$PROJECT_DIR$/todo.txt" />
     </list>
     <ignored path="thewallstreetnerdplay2.iws" />
@@ -86,19 +63,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="todo.txt" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="todo.txt" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/todo.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="35" column="41" selection-start="1582" selection-end="1582" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="mainChart.scala.html" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/views/mainChart.scala.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="2" column="0" selection-start="34" selection-end="34" vertical-scroll-proportion="0.10271903">
+            <state line="59" column="0" selection-start="2272" selection-end="2272" vertical-scroll-proportion="0.8473968">
               <folding />
             </state>
           </provider>
@@ -107,7 +75,7 @@
       <file leaf-file-name="ExprParser.scala" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/parser/ExprParser.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="24" column="37" selection-start="540" selection-end="543" vertical-scroll-proportion="0.0">
+            <state line="26" column="32" selection-start="642" selection-end="642" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -117,9 +85,7 @@
         <entry file="file://$PROJECT_DIR$/app/services/StatService.scala">
           <provider selected="true" editor-type-id="text-editor">
             <state line="131" column="0" selection-start="4893" selection-end="4893" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="e#18#44#0" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -127,7 +93,7 @@
       <file leaf-file-name="ExprLexical.scala" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/parser/ExprLexical.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="14" column="6" selection-start="240" selection-end="240" vertical-scroll-proportion="0.0">
+            <state line="22" column="40" selection-start="676" selection-end="676" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -145,7 +111,7 @@
       <file leaf-file-name="formula.scala.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/views/formula.scala.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="46" column="60" selection-start="1506" selection-end="1506" vertical-scroll-proportion="-10.461538">
+            <state line="46" column="60" selection-start="1506" selection-end="1506" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -155,9 +121,7 @@
         <entry file="file://$PROJECT_DIR$/app/controllers/Application.scala">
           <provider selected="true" editor-type-id="text-editor">
             <state line="88" column="5" selection-start="3213" selection-end="3213" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="e#21#38#0" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -175,7 +139,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/app/controllers/Admin.scala" />
         <option value="$PROJECT_DIR$/app/views/admin/uploadFundamentals.scala.html" />
         <option value="$PROJECT_DIR$/thewallstreetnerdplay2.iml" />
         <option value="$PROJECT_DIR$/app/config/AppConfig.scala" />
@@ -186,10 +149,11 @@
         <option value="$PROJECT_DIR$/app/controllers/Application.scala" />
         <option value="$PROJECT_DIR$/conf/application.conf" />
         <option value="$PROJECT_DIR$/app/views/formula.scala.html" />
-        <option value="$PROJECT_DIR$/app/parser/ExprParser.scala" />
         <option value="$PROJECT_DIR$/app/services/StatService.scala" />
         <option value="$PROJECT_DIR$/app/persistance/SymbolDAO.scala" />
         <option value="$PROJECT_DIR$/app/services/AutoCompleteService.scala" />
+        <option value="$PROJECT_DIR$/app/parser/ExprParser.scala" />
+        <option value="$PROJECT_DIR$/app/parser/ExprLexical.scala" />
         <option value="$PROJECT_DIR$/todo.txt" />
       </list>
     </option>
@@ -201,7 +165,7 @@
     <option name="x" value="-8" />
     <option name="y" value="-8" />
     <option name="width" value="1382" />
-    <option name="height" value="784" />
+    <option name="height" value="744" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
@@ -229,6 +193,16 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope">
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -293,14 +267,18 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-        </subPane>
-      </pane>
-      <pane id="Scope">
-        <subPane subId="Project Files">
           <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
+            <PATH_ELEMENT>
+              <option name="myItemId" value="thewallstreetnerdplay2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="thewallstreetnerdplay2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -506,22 +484,25 @@
       <created>1334412602734</created>
       <updated>1334412602734</updated>
     </task>
+    <task id="LOCAL-00001" summary="Added autocomplete on stock, currencies, and types">
+      <created>1335638490365</created>
+      <updated>1335638490365</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="784" extended-state="6" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="false" />
     <layout>
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32852563" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32852563" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3293919" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32852563" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32852563" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -530,6 +511,8 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32852563" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32852563" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
@@ -596,120 +579,82 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/app/views/main.scala.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="0" selection-start="836" selection-end="999" vertical-scroll-proportion="-13.076923">
-          <folding />
-        </state>
+        <state line="20" column="0" selection-start="836" selection-end="999" vertical-scroll-proportion="-13.076923" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/conf/routes">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="96" selection-start="370" selection-end="370" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="7" column="96" selection-start="370" selection-end="370" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/services/StatUpdateService.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="33" column="53" selection-start="943" selection-end="943" vertical-scroll-proportion="0.6049822">
-          <folding />
-        </state>
+        <state line="33" column="53" selection-start="943" selection-end="943" vertical-scroll-proportion="0.6049822" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/views/chart.scala.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/views/formula.scala.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="46" column="60" selection-start="1506" selection-end="1506" vertical-scroll-proportion="-10.461538">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/services/StatService.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="131" column="0" selection-start="4893" selection-end="4893" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#18#44#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/parser/ExprParser.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="37" selection-start="540" selection-end="543" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/persistance/SymbolDAO.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="42" column="26" selection-start="1323" selection-end="1323" vertical-scroll-proportion="0.6208696">
-          <folding />
-        </state>
+        <state line="42" column="26" selection-start="1323" selection-end="1323" vertical-scroll-proportion="0.6208696" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/persistance/StatDAO.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="72" column="22" selection-start="1715" selection-end="1715" vertical-scroll-proportion="0.94086957">
-          <folding>
-            <element signature="e#21#38#0" expanded="true" />
-          </folding>
-        </state>
+        <state line="72" column="22" selection-start="1715" selection-end="1715" vertical-scroll-proportion="0.94086957" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/conf/application.conf">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="46" column="23" selection-start="1171" selection-end="1171" vertical-scroll-proportion="0.7634783">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/controllers/Application.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="88" column="5" selection-start="3213" selection-end="3213" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#21#38#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/model/Symbol.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="11" selection-start="185" selection-end="185" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="46" column="23" selection-start="1171" selection-end="1171" vertical-scroll-proportion="0.7634783" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/services/AutoCompleteService.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="45" column="102" selection-start="1469" selection-end="1469" vertical-scroll-proportion="0.56173915">
-          <folding>
-            <element signature="e#18#48#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/parser/ExprLexical.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="6" selection-start="240" selection-end="240" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/todo.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="35" column="41" selection-start="1582" selection-end="1582" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="45" column="102" selection-start="1469" selection-end="1469" vertical-scroll-proportion="0.56173915" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/views/mainChart.scala.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="0" selection-start="34" selection-end="34" vertical-scroll-proportion="0.10271903">
+        <state line="2" column="0" selection-start="34" selection-end="34" vertical-scroll-proportion="0.10271903" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/parser/ExprParser.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="26" column="32" selection-start="642" selection-end="642" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/services/StatService.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="131" column="0" selection-start="4893" selection-end="4893" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/parser/ExprLexical.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="22" column="40" selection-start="676" selection-end="676" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/model/Symbol.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="11" selection-start="185" selection-end="185" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/views/formula.scala.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="46" column="60" selection-start="1506" selection-end="1506" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/controllers/Application.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="88" column="5" selection-start="3213" selection-end="3213" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/todo.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="59" column="0" selection-start="2272" selection-end="2272" vertical-scroll-proportion="0.8473968">
           <folding />
         </state>
       </provider>

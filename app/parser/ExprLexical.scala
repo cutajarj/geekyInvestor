@@ -13,10 +13,14 @@ import scala.util.parsing.combinator.lexical.StdLexical
 
 
 class ExprLexical extends StdLexical {
-  override def token: Parser[Token] = symbolWithTypeToken | floatingToken | super.token
+  override def token: Parser[Token] = indexSymbolToken | symbolWithTypeToken | floatingToken | super.token
 
   def symbolWithTypeToken: Parser[Token] = rep1(upperCaseChar) ~ optSymbolType ^^ {
     case symbol ~ t => StringLit((symbol mkString "") :: t :: Nil mkString "")
+  }
+
+  def indexSymbolToken: Parser[Token] = '^' ~ rep1(upperCaseChar) ~ optSymbolType ^^ {
+    case i ~ s ~ t => StringLit( i :: (s mkString "") :: t :: Nil mkString "")
   }
 
   def upperCaseChar = elem("upperCaseChar", ch => ch.isLetter && ch.isUpper)
