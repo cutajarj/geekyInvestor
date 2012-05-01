@@ -32,11 +32,13 @@ class AutoCompleteServiceImpl(symbolDAO: SymbolDAO) extends AutoCompleteService 
     LOG.info("Building symbols Tree")
     val allSymbols = symbolDAO.loadAllSymbols()
     val allCurrencies  = symbolDAO.loadAllCurrencies()
-    val types = symbolDAO.loadAllFundamentalTypes() ++ symbolDAO.loadAllTradedTypes()
+    val allIndexes  = symbolDAO.loadAllIndexes()
+    val tradedTypes = symbolDAO.loadAllTradedTypes()
+    val allTypes = symbolDAO.loadAllFundamentalTypes() ++ tradedTypes
     allSymbols.foreach {s =>
       pTree.update(s.name.toUpperCase,s)
       pTree.update(s.desc.toUpperCase,s)
-      types.foreach {t=>
+      allTypes.foreach {t=>
         pTreeTypes.update(s.name+"."+t.name,(s,t))
         pTreeTypes.update(s.name+"."+t.desc,(s,t))
       }
@@ -44,6 +46,14 @@ class AutoCompleteServiceImpl(symbolDAO: SymbolDAO) extends AutoCompleteService 
     allCurrencies.foreach { c1=>
       allCurrencies.foreach { c2=>
          if (c1!=c2) pTree.update(c1.name+c2.name, Symbol(c1.name+c2.name,c1.desc+" to "+c2.desc,"",""))
+      }
+    }
+    allIndexes.foreach{ i=>
+      pTree.update(i.name.toUpperCase,i)
+      pTree.update(i.desc.toUpperCase,i)
+      tradedTypes.foreach{t=>
+        pTreeTypes.update(i.name+"."+t.name,(i,t))
+        pTreeTypes.update(i.name+"."+t.desc,(i,t))
       }
     }
     LOG.info("Symbols Tree built, with {} entries",pTree.size)

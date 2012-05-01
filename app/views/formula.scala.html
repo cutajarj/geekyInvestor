@@ -43,14 +43,15 @@
         })
         .autocomplete({
             source: function( request, response ) {
-                if (request.term.indexOf(".")>=0){
+                var t = extractSelected( request.term )
+                if (t.indexOf(".")>=0){
                     $.getJSON( "autoCompleteExpressionWtType", {
-                    term: extractSelected( request.term )
+                    term: t
                     }, response );
                 }
                 else{
                     $.getJSON( "autoCompleteExpression", {
-                    term: extractSelected( request.term )
+                    term: t
                     }, response );
                 }
             },

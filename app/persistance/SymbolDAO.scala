@@ -17,6 +17,7 @@ trait SymbolDAO{
   def loadAllTradedTypes():Seq[SymbolType]
   def loadAllSymbols(): Seq[Symbol]
   def loadAllCurrencies(): Seq[Symbol]
+  def loadAllIndexes(): Seq[Symbol]
 }
 
 object SymbolDAOImpl{
@@ -42,6 +43,18 @@ class SymbolDAOImpl extends SymbolDAO {
       Symbol("BRL", "Brazil real", "BRL", "CURRENCY"),
       Symbol("EUR", "Euro", "EUR", "CURRENCY"))
 
+  }
+
+  override def loadAllIndexes():Seq[Symbol] = {
+    Seq[Symbol] (
+      Symbol("^GSPC","S&P 500 Index","^GSPC","INDEX"),
+      Symbol("^VIX","VIX Index","^VIX","INDEX"),
+      Symbol("^DJI","Dow Jones Industrial Average","^DJI","INDEX"),
+      Symbol("^DJT","Dow Jones Transporatation Average","^DJT","INDEX"),
+      Symbol("^DJU","Dow Jones Utility Average","^DJU","INDEX"),
+      Symbol("^NDX","NASDAQ 100","^NDX","INDEX"),
+      Symbol("^IXIC","NASDAQ Composite","^IXIC","INDEX")
+    )
   }
 
   override def loadAllTradedTypes(): Seq[SymbolType] = {
