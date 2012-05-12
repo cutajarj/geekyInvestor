@@ -18,30 +18,24 @@
     <style>
         .ui-autocomplete-loading { background: white url('@routes.Assets.at("images/ui-anim_basic_16x16.gif")') right center no-repeat; }
     </style>
-    <script type="text/javascript">
-        function example(eqStr,title) {
-            var eqTxt = document.getElementById('equation');
-            var titleTxt = document.getElementById('title');
-            eqTxt.value = eqStr;
-            titleTxt.value = title;
-            return false;
-        }
-        $(function() {
-            $( '#datepickerFrom' ).datepicker();
-            $( '#datepickerTo' ).datepicker();
-        });
-        $(function() {
-            $( 'button' ).button();
-        });
+        <script type="text/javascript">
 
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-31684700-1']);
+            _gaq.push(['_trackPageview']);
+
+            (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+
+        </script>
+        <script type="text/javascript">
         $(document).ready(function(){
             $('#options').toggle()
             $('#colorpicker').toggle()
-            $('#hideshow').click(function(event){
-                event.preventDefault();
-                $('#options').toggle("slow");
-                $('#colorpicker').toggle("slow");
-            });
+            $('#multiChartOptions').toggle()
         });
     </script>
 

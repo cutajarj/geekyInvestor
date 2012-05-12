@@ -67,7 +67,7 @@ text-decoration: underline;
 }
 
 #floater {
-	float:left; height:50%; margin-bottom:-180px;
+	float:left; height:50%; margin-bottom:-210px;
 }
 
 
@@ -124,7 +124,7 @@ margin:20px 0px;
 width:700px;
 }
 
-#stylized form label{
+.slabel{
 display:block;
 font-weight:bold;
 text-align:right;
@@ -133,6 +133,7 @@ float:left;
 margin:0px 0px -2px 0px;
 padding:0px;
 }
+
 #stylized form .small{
 color:#666666;
 display:block;
@@ -151,6 +152,14 @@ border:solid 1px #aacfe4;
 width:400px;
 margin:2px 0 12px 10px;
 }
+#stylized form #radioset{
+float:left;
+font-size:12px;
+padding:4px 2px;
+width:175px;
+margin:2px 0 12px 10px;
+}
+
 #stylized form #equation{
 margin:2px 0px 0px 10px;
 }
@@ -158,14 +167,33 @@ margin:2px 0px 0px 10px;
 width:20px;
 margin:2px 0px 0px 10px;
 }
+#stylized form #colorpicker2{
+width:20px;
+margin:2px 0px 0px 10px;
+}
+#stylized form #colorpicker3{
+width:20px;
+margin:2px 0px 0px 10px;
+}
 #stylized form #optionsSwitch{
     clear:both;
+    float:left;
     width:550px;
-    text-align:right;
     padding:0px;
     margin:-1px 0px;
     font-size:9px;
 }
+#stylized form #hsMulti{
+    float:left;
+    width:210px;
+    text-align:right;
+}
+#stylized form #hsOptions{
+    float:left;
+    width:340px;
+    text-align:right;
+}
+
 #stylized form button{
 clear:both;
 float:left;

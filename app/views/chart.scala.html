@@ -1,4 +1,7 @@
-@(title:String,chartRequest:Form[controllers.Application.ChartRequest],chartResult:services.EquationResult,errorMessages:Seq[String]=Nil)
+@(title:String,chartRequest:Form[model.ChartRequest],
+    chartResult:services.EquationResult,
+    chartRequstObj:model.ChartRequest,
+    errorMessages:Seq[String]=Nil)
 
 @import services.EquationResult
 
@@ -10,23 +13,20 @@
         <div style="float:left;"><img src="@routes.Assets.at("images/chartnerd.png")"/></div>
 
         <div style="width:1000px;float:left;">
-            <div style="margin:10px 8px 8px 15px;"><h1>@chartRequest("title").value.map{v=> @v }</h1></div>
+            <div style="margin:10px 8px 8px 15px;"><h1>@chartRequstObj.title</h1></div>
 
             <div id="graph_area1"
                  style="float:left;width:960px;height:380px;border-width:0px;"></div>
 
             <script type="text/javascript">
                 $(function () {
-                    var plotData = [
-                        @chartResult.result.map { x=>
-                            [@x._1,@x._2]
-                        }.mkString(", ")
-                    ];
-
-                    $.plot($("#graph_area1"), [ {
-                        data: plotData,
-                        @chartRequest("yColorValue").value.map{v=> color: "#@v" }
-                    }],{
+                    $.plot($("#graph_area1"), [ @chartResult.result.zip(chartRequstObj.yColorValue).zipWithIndex.map{case ((r,v),i)=> {
+                        data: [@r.map { x=> [@x._1,@x._2] }.mkString(", ")],
+                        color: '#@v',
+                        @if(chartRequstObj.scale == model.MultiScale) {
+                            yaxis: @i+1
+                        }
+                    } }.mkString(", ") ],{
                         xaxis: { mode: "time" }
                     });
                 });

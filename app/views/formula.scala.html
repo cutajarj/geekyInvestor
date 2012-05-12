@@ -1,14 +1,49 @@
-@(chartRequest:Form[controllers.Application.ChartRequest],errorMessages:Seq[String])
+@(chartRequest:Form[model.ChartRequest],errorMessages:Seq[String])
 
 @import helper._
 
 <script type="text/javascript">
+    function example(eqStr,title) {
+        var eqTxt = document.getElementById('equation');
+        var titleTxt = document.getElementById('title');
+        eqTxt.value = eqStr;
+        titleTxt.value = title;
+        return false;
+    }
+    $(function() {
+        $( '#datepickerFrom' ).datepicker();
+        $( '#datepickerTo' ).datepicker();
+    });
+    $(function() {
+        $( 'button' ).button();
+    });
+
+    $(document).ready(function(){
+        $('#hideshow').click(function(event){
+            event.preventDefault();
+            $('#options').toggle("fade","slow");
+        });
+    });
+
+    $(document).ready(function(){
+        $('#multihideshow').click(function(event){
+            event.preventDefault();
+            $('#colorpicker').toggle("slow");
+            $('#multiChartOptions').toggle("fade", "slow");
+        });
+    });
+
+
+    $(function() {
+        $( "#radioset" ).buttonset();
+    })
+
     $(function() {
         function split( val ) {
         return val.split( /([\(|\)|\+|\-|\*|\/]\s*)/ );
     }
-    function extractSelected( term ) {
-        var pos = getCaret(document.getElementById('equation'));
+    function extractSelected( term,id ) {
+        var pos = getCaret(document.getElementById(id));
         var allTokens = split( term );
         var token = allTokens.shift();
         var current = token.length;
@@ -35,53 +70,78 @@
         return 0;
     }
 
+    function minLength(field,txtField) {
+        // custom minLength
+        var term = extractSelected( field.value,txtField);
+        if ( term.length < 2 ) {
+            return false;
+        }
+    }
+    function focus() {
+        return false;
+    }
+
+    function select( event, ui ) {
+        var allTokens = split( this.value );
+        var finalTokens = Array( 0 );
+        var pos = getCaret(this);
+        var token = allTokens.shift();
+        var current = token.length;
+        while(current < pos){
+            finalTokens.push(token);
+            token = allTokens.shift();
+            current+=token.length;
+        }
+        finalTokens.push(ui.item.value);
+        this.value = finalTokens.join("") + allTokens.join("");
+        return false;
+    }
+
+    function source( request, response ,txtField) {
+        var t = extractSelected( request.term, txtField)
+        if (t.indexOf(".")>=0){
+            $.getJSON( "autoCompleteExpressionWtType", {
+                term: t
+            }, response );
+        }
+        else{
+            $.getJSON( "autoCompleteExpression", {
+                term: t
+            }, response );
+        }
+    }
+
+    function preventTab( event ) {
+        if ( event.keyCode === $.ui.keyCode.TAB && $( this ).data( "autocomplete" ).menu.active ) {
+            event.preventDefault();
+        }
+    }
+
     $( "#equation" )
-        .bind( "keydown", function( event ) {
-            if ( event.keyCode === $.ui.keyCode.TAB && $( this ).data( "autocomplete" ).menu.active ) {
-                event.preventDefault();
-            }
-        })
+        .bind( "keydown", preventTab)
         .autocomplete({
-            source: function( request, response ) {
-                var t = extractSelected( request.term )
-                if (t.indexOf(".")>=0){
-                    $.getJSON( "autoCompleteExpressionWtType", {
-                    term: t
-                    }, response );
-                }
-                else{
-                    $.getJSON( "autoCompleteExpression", {
-                    term: t
-                    }, response );
-                }
-            },
-            search: function() {
-                // custom minLength
-                var term = extractSelected( this.value );
-                if ( term.length < 2 ) {
-                    return false;
-                }
-            },
-            focus: function() {
-                // prevent value inserted on focus
-                return false;
-            },
-            select: function( event, ui ) {
-                var allTokens = split( this.value );
-                var finalTokens = Array( 0 );
-                var pos = getCaret(this);
-                var token = allTokens.shift();
-                var current = token.length;
-                while(current < pos){
-                    finalTokens.push(token);
-                    token = allTokens.shift();
-                    current+=token.length;
-                }
-                finalTokens.push(ui.item.value);
-                this.value = finalTokens.join("") + allTokens.join("");
-                return false;
-            }
+            source: function(request, response) {source(request, response, 'equation')},
+            search: function() {minLength(this,'equation')},
+            focus: focus,
+            select: select
         });
+    $( "#equation2" )
+        .bind( "keydown", preventTab)
+        .autocomplete({
+            source: function(request, response) {source(request, response, 'equation2')},
+            search: function() {minLength(this,'equation2')},
+            focus: focus,
+            select: select
+        });
+    $( "#equation3" )
+        .bind( "keydown", preventTab)
+        .autocomplete({
+            source: function(request, response) {source(request, response, 'equation3')},
+            search: function() {minLength(this,'equation3')},
+            focus: focus,
+            select: select
+        });
+
     });
 </script>
 
@@ -92,11 +152,11 @@
     @chartRequest.errors.map { errorMessage =>
         <div style="margin:0px 0px 0px 150px; color:red; clear:both;">@errorMessage.message</div>
     }
-    <label>Y =
+    <label class="slabel">Y =
         <span class="small">enter your expression</span>
     </label>
-
     <input type="text" name="equation" id="equation" @chartRequest("equation").value.map{v=> value="@v" }/>
+
     <input id="colorpicker" class="color {valueElement:'yColorValue'}"/>
     <input name="yColorValue" type="hidden" id="yColorValue" @chartRequest("yColorValue").value.map{v=> value="@v" }/>
 
@@ -116,18 +176,46 @@
             </li>
         </ul>
     </div>
-    <div id="optionsSwitch"><a id="hideshow" href="">options</a></div>
-    <div id="options">
-        <label style="clear:both;">From
+    <div id="optionsSwitch"><div id="hsMulti"><a id="multihideshow" href="">multi chart</a></div><div id="hsOptions"><a id="hideshow" href="">options</a></div></div>
+
+    <div id="multiChartOptions" style="clear:both;">
+    <label class="slabel" style="clear:both">Y2 = </label>
+    <input type="text" name="equation2" id="equation2" @chartRequest("equation2").value.map{v=> value="@v" }/>
+
+    <input id="colorpicker2" class="color {valueElement:'yColorValue2'}"/>
+    <input name="yColorValue2" type="hidden" id="yColorValue2" @chartRequest("yColorValue2").value.map{v=> value="@v" }/>
+
+    <label class="slabel" style="clear:both">Y3 = </label>
+    <input type="text" name="equation3" id="equation3" @chartRequest("equation3").value.map{v=> value="@v" }/>
+
+    <input id="colorpicker3" class="color {valueElement:'yColorValue3'}" />
+    <input name="yColorValue3" type="hidden" id="yColorValue3" @chartRequest("yColorValue3").value.map{v=> value="@v" }/>
+
+    <label class="slabel" style="clear:both;">Scale:
+        <span class="small">select scale type</span>
+    </label>
+    <div id="radioset">
+        <input type="radio" id="scaleSingle" name="scale" @chartRequest("scale").value.collect{ case "SingleScale" => checked="checked" }.getOrElse("")
+        value="SingleScale"/><label for="scaleSingle" style="font-size: .9em">Single</label>
+        <input type="radio" id="scaleMulti" name="scale" @chartRequest("scale").value.collect{ case "MultiScale" => checked="checked" }.getOrElse("")
+        value="MultiScale"/><label for="scaleMulti" style="font-size: .9em">Multi</label>
+        <input type="radio" id="scaleRebase" name="scale" @chartRequest("scale").value.collect{ case "RebaseScale" => checked="checked" }.getOrElse("")
+        value="RebaseScale"/><label for="scaleRebase" style="font-size: .9em">Rebase</label>
+    </div>
+
+    </div>
+
+    <div style="clear:both;" id="options">
+        <label class="slabel" style="clear:both;">From
             <span class="small">start date</span>
         </label>
         <input name="dateFrom" id="datepickerFrom" type="text" style="width:80px;" @chartRequest("dateFrom").value.map{v=> value="@v" }/>
-        <label style="width:75px;">To
+        <label class="slabel" style="width:75px;">To
             <span style="width:75px;" class="small">end date</span>
         </label>
         <input name="dateTo" id="datepickerTo" type="text" style="width:80px;" @chartRequest("dateTo").value.map{v=> value="@v" }/>
 
-        <label style="clear:both">Title
+        <label class="slabel" style="clear:both">Title
             <span class="small">chart name</span>
         </label>
         <input name="title" id="title" type="text" style="width:250px;" @chartRequest("title").value.map{v=> value="@v" }/>
