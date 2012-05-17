@@ -1,7 +1,17 @@
 @(title:String,chartRequest:Form[model.ChartRequest],errorMessages:Seq[String]=Nil)
 
 @main(title) {
-    
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#options').toggle()
+        $('#colorpicker').toggle()
+        $('#multiChartOptions').toggle()
+    });
+</script>
+
+<div id="floater"></div>
+
 <div style="margin: 0 auto; min-height: 100%; width: 900px;">
 
     <div id="content" style="width:865px;height:540px;">

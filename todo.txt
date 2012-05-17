@@ -29,16 +29,18 @@
 //admin pages fix upload to do chunk - 2hr
 //screen scrapping for ycharts - 5hr
 //online reading of not just adjclose - 2hr
-revisit stats service, distinction bt on/offline should be made on a list, online in a DAO, tree created at DAO, - 5hr
-div by zero during eq workout should leave null in series - 2hr
+How to use, About, Contact - 5hr
+Check on other browsers (chrome) - 2hr
+make chart page a bit prettier -2hr
 check loading of symbols/stats - 2hr
 daily update script to read mrq - 5hr
-How to use, About, Contact
-Check on other browsers - 2hr
-//indexes in autocomplete - 1hr
-SymbolDAO to load from txt file - 2hr
-//y2 y3 to autocomplete
+revisit stats service, distinction bt on/offline should be made on a list, online in a DAO, tree created at DAO, - 5hr
 rewrite rebase - 1hr
+SymbolDAO to load from txt file - 2hr
+div by zero during eq workout should leave null in series - 2hr
+Protect Admin - 2hr
+//indexes in autocomplete - 1hr
+//y2 y3 to autocomplete
 //remove println
 //check logging
 //auto complete for stock symbols - 5hr
@@ -46,9 +48,9 @@ rewrite rebase - 1hr
 //auto complete for currencies - 2 hr
 //indexes - 2hr high
 //multiple charts in one - high
-make chart page a bit prettier -2hr
 //analytics - 1hr
-example should be a nicer dropdown
+//example should be a nicer dropdown
+//merge mainChart and main together
 
 ##Future features
 -- release 1.0

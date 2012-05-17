@@ -3,13 +3,33 @@
 @import helper._
 
 <script type="text/javascript">
-    function example(eqStr,title) {
-        var eqTxt = document.getElementById('equation');
-        var titleTxt = document.getElementById('title');
-        eqTxt.value = eqStr;
-        titleTxt.value = title;
-        return false;
-    }
+    $(function() {
+        function example(eqStr,eq2Str,eq3Str,scaleType,title) {
+            $('#equation').val(eqStr);
+            $('#title').val(title);
+            $('#equation2').val(eq2Str);
+            $('#equation3').val(eq3Str);
+            if (eq2Str!='') {
+                $('#colorpicker').show("fade","slow");
+                $('#multiChartOptions').show("fade", "slow");
+            }
+            if (scaleType=='RebaseScale') {
+                $('#scaleRebase').click();
+            }
+            if (scaleType=='MultiScale') {
+                $('#scaleMulti').click();
+            }
+            if (scaleType=='SingleScale' || scaleType=='') {
+                $('#scaleSingle').click();
+            }
+            return false;
+        }
+
+        $('#ex1').click(function(){example('GOOG/GOOG.EPSTTM','','','SingleScale','Google\s Profit Earnings Ratio')});
+        $('#ex2').click(function(){example('^GSPC*USDEUR','','','SingleScale','S&amp;P 500 in euros')});
+        $('#ex3').click(function(){example('GE*USDGBP','','','SingleScale','General Electric in GBP')});
+        $('#ex4').click(function(){example('^GSPC','^FTSE*GBPUSD','','RebaseScale','S&amp;P 500 vs FTSE100')});
+    });
     $(function() {
         $( '#datepickerFrom' ).datepicker();
         $( '#datepickerTo' ).datepicker();
@@ -28,7 +48,7 @@
     $(document).ready(function(){
         $('#multihideshow').click(function(event){
             event.preventDefault();
-            $('#colorpicker').toggle("slow");
+            $('#colorpicker').toggle("fade","slow");
             $('#multiChartOptions').toggle("fade", "slow");
         });
     });
@@ -142,8 +162,40 @@
             select: select
         });
 
+    $( "#examples" )
+        .button({
+            text: true,
+            icons: {
+                primary: "ui-icon-triangle-1-s"
+            }
+        })
+        .hover(function() {
+            var menu = $( this ).parent().next().show().position({
+                my: "left top",
+                at: "left bottom",
+                of: this
+            });
+            $( document ).one( "click", function() {
+                menu.hide();
+            });
+            return false;
+        })
+        .click(function() {
+            return false;
+        })
+        .parent()
+        .buttonset()
+        .next()
+        .hide()
+        .menu();
+
     });
 </script>
+
+<style>
+    .ui-menu { position: absolute; width: 180px; font-size: .9em;}
+</style>
+
 
 <form method="POST" action="@routes.Application.chart" >
     @errorMessages.map { errorMessage =>
@@ -159,23 +211,18 @@
 
     <input id="colorpicker" class="color {valueElement:'yColorValue'}"/>
     <input name="yColorValue" type="hidden" id="yColorValue" @chartRequest("yColorValue").value.map{v=> value="@v" }/>
-
-    <div style="padding:2px 0px">
-        <ul class="pureCssMenu pureCssMenum">
-            <li class="pureCssMenui0"><a class="pureCssMenui0" href="#"><span>Examples</span></a>
-                <ul class="pureCssMenum">
-                    <li class="pureCssMenui"><a class="pureCssMenui" href="#"
-                                                onclick="example('GOOG/GOOG.EPSTTM','Google\s Profit Earnings Ratio');">Google's PE Ratio</a>
-                    </li>
-                    <li class="pureCssMenui"><a class="pureCssMenui" href="#"
-                                                onclick="example('^GSPC*USDEUR','S&amp;P 500 in euros');">S&amp;P 500 in euros</a></li>
-                    <li class="pureCssMenui"><a class="pureCssMenui" href="#"
-                                                onclick="example('GE*USDGBP','General Electric in GBP');">General Electric in GBP</a>
-                    </li>
-                </ul>
-            </li>
+    <div style="padding:1px 0px 0px 4px; float:left;">
+        <div>
+            <button id="examples" style="width:100px; font-size: .9em;">Examples</button>
+        </div>
+        <ul>
+            <li><a href="#" id="ex1">Google's PE Ratio</a></li>
+            <li><a href="#" id="ex2">S&amp;P 500 in euros</a></li>
+            <li><a href="#" id="ex3">General Electric in GBP</a></li>
+            <li><a href="#" id="ex4">S&amp;P 500 vs FTSE100</a></li>
         </ul>
     </div>
+
     <div id="optionsSwitch"><div id="hsMulti"><a id="multihideshow" href="">multi chart</a></div><div id="hsOptions"><a id="hideshow" href="">options</a></div></div>
 
     <div id="multiChartOptions" style="clear:both;">
@@ -220,5 +267,5 @@
         </label>
         <input name="title" id="title" type="text" style="width:250px;" @chartRequest("title").value.map{v=> value="@v" }/>
     </div>
-    <button type="submit">Show</button>
+    <button id="show" type="submit">Show</button>
 </form>
