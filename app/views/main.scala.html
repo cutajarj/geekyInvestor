@@ -1,4 +1,4 @@
-@(title:String = "")(body: Html)
+@(title:String = "Geeky Investor")(body: Html)
 
 <!DOCTYPE html>
 <html>
@@ -39,10 +39,20 @@
     <body>
 		@body
 	<div id="footer">
-	    <div style="margin-left:auto;margin-right:auto;width:310px;">
-	        <span style="float:left;width:100px;">How to use</span> <span style="float:left;width:100px;">About</span> <span
-	            style="float:left;width:100px;">Contact</span>
-	    </div>
+	    <div style="margin-left:auto;margin-right:auto;width:810px;">
+	        <span style="float:left;width:200px;">
+                <a href="@routes.Application.howItWorks">How it Works</a>
+            </span>
+            <span style="float:left;width:200px;">
+                <a href="@routes.Application.about">About</a>
+            </span>
+            <span style="float:left;width:200px;">
+                <a href="@routes.Application.contact">Contact</a>
+            </span>
+            <span class="helpLink "style="float:left;width:200px;">
+                <a href="@routes.Application.help" target="_blank">Cheat Sheet</a>
+            </span>
+        </div>
 	</div>
     </body>
 </html>

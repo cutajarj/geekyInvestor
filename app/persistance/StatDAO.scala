@@ -80,36 +80,38 @@ class StatDAOImpl(val mongoDB: DB) extends StatDAO {
   def update(stat: Stat) = stat.key.map {
     k =>
       LOG.debug("Updating {}", stat)
-      /*val datastore = DatastoreServiceFactory.getDatastoreService
-      val entity = new Entity(k)
+      val fundamentalColl = mongoDB.getCollection("fundamentalColl")
+      val updateCriteria = new BasicDBObject()
+      updateCriteria.put("_id",k)
+      val entity = new BasicDBObject()
+      entity.put("_id",k)
+      entity.put("t", stat.statType)
+      entity.put("s", stat.symbol)
+      entity.put("v", stat.value)
+      entity.put("ts", stat.timeStamp.getTime)
 
-      entity.setProperty("statType", stat.statType)
-      entity.setProperty("symbol", stat.symbol)
-      entity.setProperty("value", stat.value)
-      entity.setProperty("timeStamp", stat.timeStamp)
-      entity.setProperty("value", stat.value)
-
-      datastore.put(entity)*/
-      null
+      fundamentalColl.update(updateCriteria,entity)
   }
 
 
   def loadLatest(t: String, s: String): Stat = {
-    //LOG.debug("Loading Latest {}.{}",s,t)
-    /*val dataStore = DatastoreServiceFactory.getDatastoreService
-    val query = new Query("Stat")
-    query.addFilter("statType", Query.FilterOperator.EQUAL, t)
-    query.addFilter("symbol", Query.FilterOperator.EQUAL, s)
-    query.addSort("timeStamp", SortDirection.DESCENDING)
-    val pq = dataStore.prepare(query)
+    LOG.debug("Loading Latest {}.{}",s,t)
+    val fundamentalColl = mongoDB.getCollection("fundamentalColl")
+    val search = new BasicDBObject()
+    search.put("t", t)
+    search.put("s", s)
 
-    val stats = asStats(pq.asIterable(FetchOptions.Builder.withLimit(1)))
+    val sort = new BasicDBObject()
+    sort.put("ts",-1)
+
+    val result = fundamentalColl.find(search).sort(sort).limit(1)
+
+    val stats = asStats(result)
+
     if (stats.nonEmpty)
       stats.head
     else
       throw new IllegalArgumentException("Unable to find symbol: %s.%s".format(s, t))
-      */
-    null
   }
 
   def load(t: Option[String] = None, s: Option[String] = None): Iterable[Stat] = {

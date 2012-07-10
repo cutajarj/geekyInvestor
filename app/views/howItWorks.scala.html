@@ -1,0 +1,55 @@
+@main("Geeky Investor: How to Use") {
+<div id="spacerTop"></div>
+
+<div style="margin: 0 auto; min-height: 100%; width: 900px;">
+
+        <div id="header" style="width:855px;margin-left:auto;margin-right:auto;">
+            <a href="@routes.Application.index"><img src="@routes.Assets.at("images/title2.png")" alt="The Wall Street Nerd"/></a>
+        </div>
+
+        <div style="padding:0px 0px 10px 0px;width:850px;"><div style="padding:1px;width:600px;float:left;"></div><h3>What's all this fuss about?</h3></div>
+
+        The Geeky Investor helps you do your own market research. Instead of presenting you with a stock screener
+        containing the usual numbers and charts, it allows you to enter expressions and work out exactly what you
+        need. Building your expression is easy. Here is a cheat sheet that will tell you how to do that with some
+        examples.
+
+        <div style="padding:0px 0px 10px 0px;width:850px;"><div style="padding:1px;width:600px;float:left;"></div><h3>Devil's in the details.</h3></div>
+
+        Let's say you want to calculate the price earnings for a particular stock. That's easy right?<br/>
+            <div style="padding:1px;width:60px;float:left"></div>PE = Share Price / Earnings per share<br/>
+        Now let's say you would like to know how the company's PE did over the last 10 years. You start by getting
+        a history of earnings for the last 10 years, which happen to be reported say every quarter. You can then
+        apply the above expression on the day the report comes out. Unfortunately this would give you only 4 points
+        a year, leaving you with huge gaps in between quarter reports.<br/><br/>
+
+        Another way of looking at it is to use:<br/>
+            <div style="padding:1px;width:60px;float:left"></div>PE Today = Today's Price / Last Reported EPS<br/>
+        meaning that the last reported EPS is what is still valid and is replaced only when the next earnings become
+        available. This is what most screeners (such as Yahoo! finance) and others report (hence why you see it changing
+        every day). To build a historical series using this method you obtain daily stock prices and quarterly earnings.
+        Then for every date you work out the PE by using the stock price and the latest earnings for that day.<br/><br/>
+
+        This is exactly how the Geeky Investor works things out. Of course we also apply this to everything, not just
+        PE. This proves to be useful in a lot of cases, for example when comparing fundamentals from companies reporting
+        their earnings at different quarters.<br/><br/>
+
+        <div style="padding:0px 0px 10px 0px;width:850px;"><div style="padding:1px;width:600px;float:left;"></div><h3>What are your sources?</h3></div>
+
+        Data is fetched from various sources. Daily pricing is retrieved from APIs provided by Google and Yahoo! finance.
+        Some fundamental data is also read from Yahoo!, while others are manually obtained from the respective company
+        website. Currencies are retrieved using openexchangerates.org
+
+    <div style="padding:0px 0px 10px 0px;width:850px;"><div style="padding:1px;width:600px;float:left;"></div><h3>Tell me the future!</h3></div>
+
+        It's proving quite hard to chart the future and we have to admit that building a time machine is proving to be
+        very challenging. When we have spare time we are spending some effort on this road map:
+        <ul style="padding:10px 0px 30px 35px;">
+            <li>Commodities prices</li>
+            <li>More historical FX</li>
+            <li>More currencies</li>
+            <li>More stock data</li>
+            <li>Numerical Functions</li>
+        </ul>
+</div>
+}

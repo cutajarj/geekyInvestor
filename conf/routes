@@ -4,6 +4,11 @@
 
 # Home page
 GET     /                                   controllers.Application.index
+GET     /howItWorks                         controllers.Application.howItWorks
+GET     /about                              controllers.Application.about
+GET     /contact                            controllers.Application.contact
+POST    /contact                            controllers.Application.contactPost
+GET     /help                               controllers.Application.help
 GET     /autoCompleteExpression             controllers.Application.autoCompleteExpression(term)
 GET     /autoCompleteExpressionWtType       controllers.Application.autoCompleteExpressionWtType(term)
 POST    /postChart                          controllers.Application.chart

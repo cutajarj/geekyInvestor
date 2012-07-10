@@ -1,6 +1,6 @@
-@(title:String,chartRequest:Form[model.ChartRequest],errorMessages:Seq[String]=Nil)
+@(chartRequest:Form[model.ChartRequest],errorMessages:Seq[String]=Nil)
 
-@main(title) {
+@main() {
 
 <script type="text/javascript">
     $(document).ready(function(){
@@ -16,7 +16,7 @@
 
     <div id="content" style="width:865px;height:540px;">
 
-        <div id="header" style="width:855px;margin-left:auto;margin-right:auto;"><img src="@routes.Assets.at("images/title.png")" alt="The Wall Street Nerd"/></div>
+        <div id="header" style="width:855px;margin-left:auto;margin-right:auto;"><img src="@routes.Assets.at("images/title2.png")" alt="Geeky Investor"/></div>
 
         <div id="stylized" class="mainPageEquationForm">
             @formula(chartRequest,errorMessages)

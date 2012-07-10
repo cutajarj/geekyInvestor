@@ -28,10 +28,13 @@ class SymbolDAOImpl extends SymbolDAO {
 
   override def loadAllFundamentalTypes(): Seq[SymbolType] = {
     Seq[SymbolType](
-      SymbolType("BVPS", "Book Value per share", "b4", "STOCK", (s: String) => s.toDouble),
-      SymbolType("EPSTTM", "Earnings per share TTM", "e", "STOCK", (s: String) => s.toDouble),
-      SymbolType("RTTM", "Revenue TTM", "s6", "STOCK", mdDoubleConvertor),
-      SymbolType("SO", "Shares Outstanding", "j2", "STOCK", commaDoubleConvertor)
+      SymbolType("BVPS", "Book Value per share", Some("b4"), "STOCK", mdDoubleConvertor),
+      SymbolType("EPSTTM", "Earnings per share TTM", Some("e"), "STOCK", mdDoubleConvertor),
+      SymbolType("RTTM", "Revenue TTM", Some("s6"), "STOCK", mdDoubleConvertor),
+      SymbolType("RPSTTM", "Revenue per share TTM", None, "STOCK", mdDoubleConvertor),
+      SymbolType("GPTTM", "Gross profit TTM", None, "STOCK", mdDoubleConvertor),
+      SymbolType("NITTM", "Net Income TTM", None, "STOCK", mdDoubleConvertor),
+      SymbolType("SO", "Shares Outstanding", Some("j2"), "STOCK", mdDoubleConvertor)
     )
   }
 
@@ -59,26 +62,29 @@ class SymbolDAOImpl extends SymbolDAO {
 
   override def loadAllTradedTypes(): Seq[SymbolType] = {
     Seq[SymbolType](
-      SymbolType("OPEN", "Opening Price", "OPEN", "TRADED", (s: String) => s.toDouble),
-      SymbolType("CLOSE", "Closing Price", "CLOSE", "TRADED", (s: String) => s.toDouble),
-      SymbolType("HIGH", "High Day Price", "HIGH", "TRADED", (s: String) => s.toDouble),
-      SymbolType("LOW", "Low Day Price", "LOW", "STOCK", (s: String) => s.toDouble),
-      SymbolType("VOLUME", "Volume Day", "VOLUME", "STOCK", (s: String) => s.toDouble)
+      SymbolType("OPEN", "Opening Price", Some("OPEN"), "TRADED", commaDoubleConvertor),
+      SymbolType("CLOSE", "Closing Price", Some("CLOSE"), "TRADED", commaDoubleConvertor),
+      SymbolType("HIGH", "High Day Price", Some("HIGH"), "TRADED", commaDoubleConvertor),
+      SymbolType("LOW", "Low Day Price", Some("LOW"), "STOCK", commaDoubleConvertor),
+      SymbolType("VOLUME", "Volume Day", Some("VOLUME"), "STOCK", commaDoubleConvertor)
     )
   }
 
+  def commaDoubleConvertor(s: String): Option[Double] = s match {
+    case "N/A" => None
+    case x => Some(x.replace(",", "").toDouble)
+  }
 
-  def commaDoubleConvertor(s: String): Double = s.replace(",", "").toDouble
+  def mdDoubleConvertor(s: String): Option[Double] = {
+    val bPattern = """(-?[0-9|,]+(\.[0-9][0-9]*)?)B""".r
+    val mPattern = """(-?[0-9|,]+(\.[0-9][0-9]*)?)M""".r
+    val sPattern = """(-?[0-9|,]+(\.[0-9][0-9]*)?)""".r
 
-  def mdDoubleConvertor(s: String): Double = {
-    val bPattern = """(-?[0-9]+(\.[0-9][0-9]*)?)B""".r
-    val mPattern = """(-?[0-9]+(\.[0-9][0-9]*)?)M""".r
-    val sPattern = """(-?[0-9]+(\.[0-9][0-9]*)?)""".r
-
-    s match {
-      case bPattern(x, y) => x.toDouble * 1000000000.0
-      case mPattern(x, y) => x.toDouble * 1000000.0
-      case sPattern(x, y) => x.toDouble
+    s.trim match {
+      case bPattern(x, y) => Some(x.replace(",","").toDouble * 1000000000.0)
+      case mPattern(x, y) => Some(x.replace(",","").toDouble * 1000000.0)
+      case sPattern(x, y) => Some(x.replace(",","").toDouble)
+      case "N/A" => None
       case _ => throw new IllegalArgumentException("Invalid decimal format: " + s)
     }
   }
@@ -457,7 +463,7 @@ class SymbolDAOImpl extends SymbolDAO {
       Symbol("PCLN", "Priceline.com Inc", "PCLN", "STOCK"),
       Symbol("PFG", "Principal Financial Group", "PFG", "STOCK"),
       Symbol("PG", "Procter & Gamble", "PG", "STOCK"),
-      Symbol("PGN", "Progress Energy Inc.", "PGN", "STOCK"),
+      //Symbol("PGN", "Progress Energy Inc.", "PGN", "STOCK"),
       Symbol("PGR", "Progressive Corp.", "PGR", "STOCK"),
       Symbol("PLD", "ProLogis", "PLD", "STOCK"),
       Symbol("PRU", "Prudential Financial", "PRU", "STOCK"),

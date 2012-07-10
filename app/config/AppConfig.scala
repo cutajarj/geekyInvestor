@@ -19,6 +19,7 @@ object AppConfig {
   lazy val symbolDAO:SymbolDAO = new SymbolDAOImpl
 
   lazy val statService:StatService = new StatServiceImpl(fundamentalDAO)
+  lazy val statUpdateService:StatUpdateService = new StatUpdateServiceImpl(symbolDAO,fundamentalDAO)
   lazy val exprParser:ExprParser = new ExprParser()
   lazy val equationService:EquationService = new EquationServiceImpl(exprParser,statService)
 

@@ -1,0 +1,52 @@
+@(message:Option[String]=None,formError:Option[String]=None)
+
+@main("Geeky Investor: Contact") {
+<script type="text/javascript">
+    $(function() {
+        $( 'button' ).button();
+    });
+    </script>
+    <div id="spacerTop"></div>
+
+<div style="margin: 0 auto; min-height: 99%; width: 900px;">
+
+    <div id="header" style="width:855px;margin-left:auto;margin-right:auto;">
+        <a href="@routes.Application.index"><img src="@routes.Assets.at("images/title2.png")" alt="The Wall Street Nerd"/></a>
+    </div>
+
+    <div style="padding:0px 0px 10px 0px;width:850px;"><div style="padding:1px;width:600px;float:left;"></div><h3>Contact Us</h3></div>
+
+    @message.map{m=>
+        <div style="padding:0px 0px 10px 0px;width:850px;color:blue;"><div style="padding:1px;width:510px;float:left;"></div>@m</div>
+    }
+    @formError.map{m=>
+        <div style="padding:0px 0px 10px 0px;width:850px;color:red;"><div style="padding:1px;width:510px;float:left;"></div>@m</div>
+    }
+
+
+    We would love to hear your comments, feedback and ideas. Please get in touch using this page.
+    <div id="stylized">
+        <form method="POST" action="@routes.Application.contact" >
+
+            <label class="slabel" style="clear:both;">name
+                <span class="small">full name please</span>
+            </label>
+            <input type="text" name="name" id="name" style="width:200px;"/>
+
+            <label class="slabel" style="clear:both;">email
+                <span class="small">where can we reach you?</span>
+            </label>
+            <input type="text" name="email" id="email" style="width:200px;"/>
+
+            <label class="slabel" style="clear:both;">message
+                <span class="small">ideas and feedback</span>
+            </label>
+            <textarea name="message" id="message" style="width:380px;height:110px;"></textarea>
+            <button id="show" type="submit">Send</button>
+        </form>
+    </div>
+
+    </div>
+
+</div>
+}

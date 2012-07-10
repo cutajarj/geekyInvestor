@@ -15,6 +15,11 @@ img { border: none; }
 a { color: #57626a; text-decoration: none; }
 a:hover { text-decoration: underline; color : #000; }
 
+.helpLink { color:#5199E1; }
+.helpLink a { color: #5199E1; text-decoration: none; }
+.helpLink a:hover { text-decoration: underline; color : #5177E1; }
+
+
 #header {
 padding: 10px 0 20px 0;
 }
@@ -152,6 +157,14 @@ border:solid 1px #aacfe4;
 width:400px;
 margin:2px 0 12px 10px;
 }
+#stylized form textarea{
+float:left;
+font-size:12px;
+padding:4px 2px;
+border:solid 1px #aacfe4;
+width:400px;
+margin:2px 0 12px 10px;
+}
 #stylized form #radioset{
 float:left;
 font-size:12px;
@@ -216,9 +229,14 @@ min-height: 100%;
 	}  /* must be same height as the footer */
 
 #footer {position: relative;
-	margin-top: -20px; /* negative value of footer height */
+	margin-top: -10px; /* negative value of footer height */
+    color:#333333;
+    font-size:12px;
 	height: 1px;
-	clear:both;}
+	clear:both;
+	border-top: 1px solid #bbb;
+	padding: 4px;
+}
 
 #spacerTop {
 	clear:both;

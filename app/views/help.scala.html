@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Geeky Investor: Help</title>
+    <link href="@routes.Assets.at("stylesheets/mainstyle.css")" type="text/css" rel="stylesheet" />
+    <style type="text/css">
+        table {
+            border-width: 1px;
+            border-spacing: 2px;
+            border-style: outset;
+            border-color: gray;
+            border-collapse: collapse;
+            background-color: white;
+            width: 450px;
+            float:left;
+            margin:5px;
+        }
+        table th {
+            border-width: 1px;
+            padding: 1px;
+            border-style: inset;
+            border-color: gray;
+            background-color:white;
+            padding: 1px 10px 1px 10px;
+        }
+        table td {
+            border-width: 1px;
+            padding: 1px;
+            border-style: inset;
+            border-color: gray;
+            background-color:white;
+            padding: 1px 10px 1px 10px;
+        }
+    </style>
+</head>
+<body>
+<div style="width:930px;margin-left:auto;margin-right:auto;padding:5px">
+<table>
+    <tr>
+        <th colspan="3">
+            Expression Help
+        </th>
+    </tr>
+    <tr>
+        <th>Format</th>
+        <th>Example</th>
+        <th>Description</th>
+    </tr>
+    <tr>
+        <td>SYMBOL.FUNDAMENTAL</td>
+        <td>MS.EPSTTM</td>
+        <td>Retrieves a time series containing the selected fundamental for that stock symbol.</td>
+    </tr>
+    <tr>
+        <td>SYMBOL.PRICEMODE</td>
+        <td>CAT.OPEN</td>
+        <td>Retrieves a time series containing the traded price at the selected day time (see below for the different modes available).</td>
+    </tr>
+    <tr>
+        <td>SYMBOL.VOLUME</td>
+        <td>AMZN.VOLUME</td>
+        <td>Retrieves a time series containing the daily traded volumes for the specified stock symbol.</td>
+    </tr>
+    <tr>
+        <td>SYMBOL</td>
+        <td>GE</td>
+        <td>Retrieves a time series containing the daily adjusted close stock price. This is equivalent to using SYMBOL.ADJCLOSE</td>
+    </tr>
+    <tr>
+        <td>CCYCCY</td>
+        <td>USDEUR</td>
+        <td>Retrieves a time series with the rate required to convert from the first to second currency.</td>
+    </tr>
+</table>
+<table>
+    <tr>
+        <td><b>SYMBOL</b></td>
+    </tr>
+    <tr>
+       <td>Any RIC symbol is allowed, such as GOOG, AIG or BAC. In addition a number of indexes are supported using
+       Yahoo! finance symbols, such as ^GSPC (S&P500), ^FTSE (FTSE100) and ^GDAXI (DAX). Some more examples can be found
+       <a href="http://finance.yahoo.com/intlindices">here</a>.</td>
+    </tr>
+</table>
+<table>
+    <tr>
+        <td>
+            <b>FUNDAMENTAL</b>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Current supported stock fundamentals are: <br/>
+            EPSTTM - Earnings per share trailing 12 months<br/>
+            SO - Shares outstanding <br/>
+            RTTM - Revenue trailing 12 month<br/>
+            BVPS - Book Value per share<br/>
+        </td>
+    </tr>
+</table>
+<table>
+    <tr>
+        <td>
+            <b>PRICEMODE</b>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Current supported modes are: <br/>
+            OPEN - Opening day traded price<br/>
+            CLOSE -  Closing day traded price<br/>
+            HIGH - Highest day traded price<br/>
+            LOW - Lowest day traded price<br/>
+            ADJCLOSE - Adjusted close day price<br/>
+        </td>
+    </tr>
+</table>
+<table>
+    <tr>
+        <td>
+            <b>CURRENCY</b>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Current supported currencies are: <br/>
+            USD - US dollar<br/>
+            EUR - Euro<br/>
+            GBP - Pound Sterling<br/>
+            CNY - Chinese yuan<br/>
+            BRL - Brazil real<br/>
+        </td>
+    </tr>
+</table>
+</div>
+</body>
+</html>

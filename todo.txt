@@ -29,16 +29,21 @@
 //admin pages fix upload to do chunk - 2hr
 //screen scrapping for ycharts - 5hr
 //online reading of not just adjclose - 2hr
-How to use, About, Contact - 5hr
-Check on other browsers (chrome) - 2hr
+//Geeky investor images - 2hr
+//New domain - 1hr
+//How to use - 2hr
+//About - 2hr
+//Contact - 2hr
+daily update script to read mrq - 5hr
+//Check on other browsers (chrome) - 2hr
 make chart page a bit prettier -2hr
 check loading of symbols/stats - 2hr
-daily update script to read mrq - 5hr
 revisit stats service, distinction bt on/offline should be made on a list, online in a DAO, tree created at DAO, - 5hr
 rewrite rebase - 1hr
 SymbolDAO to load from txt file - 2hr
 div by zero during eq workout should leave null in series - 2hr
 Protect Admin - 2hr
+Admin to change symbols - 5hr
 //indexes in autocomplete - 1hr
 //y2 y3 to autocomplete
 //remove println
@@ -69,3 +74,5 @@ fix default.html and default-chart, make them one somehow - low
 Sometimes it's reporting missing data for a date range
 Missing brackets after entering them on second page
 For quarter figures it's loading everything, specify upper date to DS, then filter at application level to floor of lower limit
+leaving the expression form empty will give an error
+Hitting enter on input does not submit

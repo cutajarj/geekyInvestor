@@ -29,6 +29,7 @@ object Admin extends Controller {
   }
 
   def updateFundamentals = Action {
+    statUpdateService.updateStock(false)
     Ok(views.html.admin.index("The Wall Street Nerd"))
   }
 
