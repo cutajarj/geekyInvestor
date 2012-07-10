@@ -1,29 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="308cb5a3-b5d6-44e9-ab09-1b02ffdafdb8" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/tools/YChartsScanner.scala" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/views/about.scala.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/views/contact.scala.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/views/help.scala.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/views/howItWorks.scala.html" />
+    <list default="true" id="308cb5a3-b5d6-44e9-ab09-1b02ffdafdb8" name="Default" comment="change from wallstreetnerd to the geekyinvestor">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/images/chartnerd2.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/images/photothumb.db" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/images/title2.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/stylesheets/cupertino/jquery-ui-1.8.20.custom.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Procfile" afterPath="$PROJECT_DIR$/Procfile" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/config/AppConfig.scala" afterPath="$PROJECT_DIR$/app/config/AppConfig.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/controllers/Admin.scala" afterPath="$PROJECT_DIR$/app/controllers/Admin.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/controllers/Application.scala" afterPath="$PROJECT_DIR$/app/controllers/Application.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/model/SymbolType.scala" afterPath="$PROJECT_DIR$/app/model/SymbolType.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/persistance/StatDAO.scala" afterPath="$PROJECT_DIR$/app/persistance/StatDAO.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/persistance/SymbolDAO.scala" afterPath="$PROJECT_DIR$/app/persistance/SymbolDAO.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/services/StatUpdateService.scala" afterPath="$PROJECT_DIR$/app/services/StatUpdateService.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views/admin/index.scala.html" afterPath="$PROJECT_DIR$/app/views/admin/index.scala.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views/chart.scala.html" afterPath="$PROJECT_DIR$/app/views/chart.scala.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views/formula.scala.html" afterPath="$PROJECT_DIR$/app/views/formula.scala.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views/index.scala.html" afterPath="$PROJECT_DIR$/app/views/index.scala.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views/main.scala.html" afterPath="$PROJECT_DIR$/app/views/main.scala.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/conf/routes" afterPath="$PROJECT_DIR$/conf/routes" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/stylesheets/mainstyle.css" afterPath="$PROJECT_DIR$/public/stylesheets/mainstyle.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/todo.txt" afterPath="$PROJECT_DIR$/todo.txt" />
     </list>
     <ignored path="thewallstreetnerdplay2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -90,10 +73,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="YChartsScanner.scala" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="YChartsScanner.scala" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/tools/YChartsScanner.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="86" column="213" selection-start="3298" selection-end="3298" vertical-scroll-proportion="0.2413793">
+            <state line="86" column="213" selection-start="3298" selection-end="3298" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="e#15#48#0" expanded="true" />
               </folding>
@@ -101,10 +84,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.scala.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/views/admin/index.scala.html">
+      <file leaf-file-name=".gitignore" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="81" selection-start="298" selection-end="298" vertical-scroll-proportion="0.0">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="application.conf" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/conf/application.conf">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="10" column="47" selection-start="355" selection-end="355" vertical-scroll-proportion="0.317757">
               <folding />
             </state>
           </provider>
@@ -510,7 +502,11 @@
       <created>1337288716662</created>
       <updated>1337288716662</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="change from wallstreetnerd to the geekyinvestor">
+      <created>1341936237591</created>
+      <updated>1341936237591</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -530,7 +526,7 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23158693" sideWeight="0.6712329" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23158693" sideWeight="0.6729452" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32876712" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -576,7 +572,7 @@
     <option name="SHOW_VCS_ERROR_NOTIFICATIONS" value="false" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="added new example drop down and an extra example.&#10;refactored main page to be only one" />
+    <option name="LAST_COMMIT_MESSAGE" value="change from wallstreetnerd to the geekyinvestor" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -594,6 +590,7 @@
     <MESSAGE value="Added indexes in autocomplete list" />
     <MESSAGE value="added multi charts and google analytics" />
     <MESSAGE value="added new example drop down and an extra example.&#10;refactored main page to be only one" />
+    <MESSAGE value="change from wallstreetnerd to the geekyinvestor" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -603,16 +600,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/views/contact.scala.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="8" selection-start="842" selection-end="842" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/conf/routes">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/model/Symbol.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state line="10" column="54" selection-start="220" selection-end="228" vertical-scroll-proportion="0.0" />
@@ -680,10 +667,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/tools/YChartsScanner.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="86" column="213" selection-start="3298" selection-end="3298" vertical-scroll-proportion="0.2413793">
+        <state line="86" column="213" selection-start="3298" selection-end="3298" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="e#15#48#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/conf/application.conf">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="47" selection-start="355" selection-end="355" vertical-scroll-proportion="0.317757">
+          <folding />
         </state>
       </provider>
     </entry>
