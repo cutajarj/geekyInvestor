@@ -30,7 +30,7 @@ class AutoCompleteServiceImpl(symbolDAO: SymbolDAO) extends AutoCompleteService 
 
   def buildTree() {
     LOG.info("Building symbols Tree")
-    val allSymbols = symbolDAO.loadAllSymbols()
+    val allSymbols = symbolDAO.loadAllStockTickers()
     val allCurrencies  = symbolDAO.loadAllCurrencies()
     val allIndexes  = symbolDAO.loadAllIndexes()
     val tradedTypes = symbolDAO.loadAllTradedTypes()

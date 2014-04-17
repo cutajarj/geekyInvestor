@@ -167,7 +167,7 @@ class StatServiceImpl(val statDAO: StatDAO) extends StatService {
                 Some(extractSymbolFromOnlineRecord(statType, symbol, d, o, h, l, c, cAdj, v, sdf))
               }
               catch {
-                case e => throw new IllegalStateException(e)
+                case e: Throwable => throw new IllegalStateException(e)
               }
             case _ =>
               None

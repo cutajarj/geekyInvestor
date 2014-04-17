@@ -85,7 +85,7 @@ object Application extends Controller {
     true
   }
   catch {
-    case _ => false
+    case e: Throwable => false
   }
 
   val chartForm = Form(

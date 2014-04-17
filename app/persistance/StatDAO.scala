@@ -95,7 +95,7 @@ class StatDAOImpl(val mongoDB: DB) extends StatDAO {
 
 
   def loadLatest(t: String, s: String): Stat = {
-    LOG.debug("Loading Latest {}.{}",s,t)
+    LOG.debug(s"Loading Latest $s.$t")
     val fundamentalColl = mongoDB.getCollection("fundamentalColl")
     val search = new BasicDBObject()
     search.put("t", t)
@@ -115,7 +115,7 @@ class StatDAOImpl(val mongoDB: DB) extends StatDAO {
   }
 
   def load(t: Option[String] = None, s: Option[String] = None): Iterable[Stat] = {
-    LOG.debug("Loading {}.{}", s, t)
+    LOG.debug(s"Loading $s.$t")
     val fundamentalColl = mongoDB.getCollection("fundamentalColl")
     val search = new BasicDBObject()
     t.map(search.put("t", _))

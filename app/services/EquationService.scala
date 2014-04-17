@@ -104,7 +104,7 @@ class EquationServiceImpl(val equationParser: ExprParser, val statService: StatS
         EquationResult(false, Seq[String]("An unexpected error has occurred. We'll be investigating this..."), Seq(Iterator()))
       case e: IllegalArgumentException =>
         EquationResult(false, Seq[String](e.getMessage), Seq(Iterator()))
-      case e =>
+      case e: Throwable =>
         LOG.error("Error while generating %s %s %s".format(exprs, fromDate, toDate), e)
         EquationResult(false, Seq[String]("An unexpected error has occurred. We'll be investigating this..."), Seq(Iterator()))
     }

@@ -3,6 +3,12 @@ package persistance
 import model.Symbol
 import model.SymbolType
 import org.slf4j.LoggerFactory
+import com.mongodb.DB
+import SymbolDAOImpl._
+import collection.JavaConversions._
+import com.mongodb.DBObject
+import com.mongodb.BasicDBObject
+import org.bson.types.ObjectId
 
 /**
  * Created by IntelliJ IDEA.
@@ -12,19 +18,21 @@ import org.slf4j.LoggerFactory
  * To change this template use File | Settings | File Templates.
  */
 
-trait SymbolDAO{
+trait SymbolDAO {
   def loadAllFundamentalTypes(): Seq[SymbolType]
-  def loadAllTradedTypes():Seq[SymbolType]
-  def loadAllSymbols(): Seq[Symbol]
+  def loadAllTradedTypes(): Seq[SymbolType]
+  def loadAllStockTickers(): Seq[Symbol]
   def loadAllCurrencies(): Seq[Symbol]
   def loadAllIndexes(): Seq[Symbol]
+  def saveAllSymbols(symbols: Iterable[Symbol])
+  def updateSymbol(stockTicker: Symbol)
 }
 
-object SymbolDAOImpl{
+object SymbolDAOImpl {
   val LOG = LoggerFactory.getLogger(classOf[SymbolDAOImpl])
 }
 
-class SymbolDAOImpl extends SymbolDAO {
+class SymbolDAOImpl(val mongoDB: DB) extends SymbolDAO {
 
   override def loadAllFundamentalTypes(): Seq[SymbolType] = {
     Seq[SymbolType](
@@ -34,8 +42,7 @@ class SymbolDAOImpl extends SymbolDAO {
       SymbolType("RPSTTM", "Revenue per share TTM", None, "STOCK", mdDoubleConvertor),
       SymbolType("GPTTM", "Gross profit TTM", None, "STOCK", mdDoubleConvertor),
       SymbolType("NITTM", "Net Income TTM", None, "STOCK", mdDoubleConvertor),
-      SymbolType("SO", "Shares Outstanding", Some("j2"), "STOCK", mdDoubleConvertor)
-    )
+      SymbolType("SO", "Shares Outstanding", Some("j2"), "STOCK", mdDoubleConvertor))
   }
 
   override def loadAllCurrencies(): Seq[Symbol] = {
@@ -48,16 +55,15 @@ class SymbolDAOImpl extends SymbolDAO {
 
   }
 
-  override def loadAllIndexes():Seq[Symbol] = {
-    Seq[Symbol] (
-      Symbol("^GSPC","S&P 500 Index","^GSPC","INDEX"),
-      Symbol("^VIX","VIX Index","^VIX","INDEX"),
-      Symbol("^DJI","Dow Jones Industrial Average","^DJI","INDEX"),
-      Symbol("^DJT","Dow Jones Transporatation Average","^DJT","INDEX"),
-      Symbol("^DJU","Dow Jones Utility Average","^DJU","INDEX"),
-      Symbol("^NDX","NASDAQ 100","^NDX","INDEX"),
-      Symbol("^IXIC","NASDAQ Composite","^IXIC","INDEX")
-    )
+  override def loadAllIndexes(): Seq[Symbol] = {
+    Seq[Symbol](
+      Symbol("^GSPC", "S&P 500 Index", "^GSPC", "INDEX"),
+      Symbol("^VIX", "VIX Index", "^VIX", "INDEX"),
+      Symbol("^DJI", "Dow Jones Industrial Average", "^DJI", "INDEX"),
+      Symbol("^DJT", "Dow Jones Transporatation Average", "^DJT", "INDEX"),
+      Symbol("^DJU", "Dow Jones Utility Average", "^DJU", "INDEX"),
+      Symbol("^NDX", "NASDAQ 100", "^NDX", "INDEX"),
+      Symbol("^IXIC", "NASDAQ Composite", "^IXIC", "INDEX"))
   }
 
   override def loadAllTradedTypes(): Seq[SymbolType] = {
@@ -66,8 +72,7 @@ class SymbolDAOImpl extends SymbolDAO {
       SymbolType("CLOSE", "Closing Price", Some("CLOSE"), "TRADED", commaDoubleConvertor),
       SymbolType("HIGH", "High Day Price", Some("HIGH"), "TRADED", commaDoubleConvertor),
       SymbolType("LOW", "Low Day Price", Some("LOW"), "STOCK", commaDoubleConvertor),
-      SymbolType("VOLUME", "Volume Day", Some("VOLUME"), "STOCK", commaDoubleConvertor)
-    )
+      SymbolType("VOLUME", "Volume Day", Some("VOLUME"), "STOCK", commaDoubleConvertor))
   }
 
   def commaDoubleConvertor(s: String): Option[Double] = s match {
@@ -81,517 +86,60 @@ class SymbolDAOImpl extends SymbolDAO {
     val sPattern = """(-?[0-9|,]+(\.[0-9][0-9]*)?)""".r
 
     s.trim match {
-      case bPattern(x, y) => Some(x.replace(",","").toDouble * 1000000000.0)
-      case mPattern(x, y) => Some(x.replace(",","").toDouble * 1000000.0)
-      case sPattern(x, y) => Some(x.replace(",","").toDouble)
+      case bPattern(x, y) => Some(x.replace(",", "").toDouble * 1000000000.0)
+      case mPattern(x, y) => Some(x.replace(",", "").toDouble * 1000000.0)
+      case sPattern(x, y) => Some(x.replace(",", "").toDouble)
       case "N/A" => None
       case _ => throw new IllegalArgumentException("Invalid decimal format: " + s)
     }
   }
 
-  override def loadAllSymbols(): Seq[Symbol] = {
-    Seq[Symbol](
-      Symbol("MMM", "3M Co.", "MMM", "STOCK"),
-      Symbol("ACE", "ACE Limited", "ACE", "STOCK"),
-      Symbol("ABT", "Abbott Laboratories", "ABT", "STOCK"),
-      Symbol("ANF", "Abercrombie & Fitch Company A", "ANF", "STOCK"),
-      Symbol("ACN", "Accenture", "ACN", "STOCK"),
-      Symbol("ADBE", "Adobe Systems Inc", "ADBE", "STOCK"),
-      Symbol("AMD", "Advanced Micro Devices", "AMD", "STOCK"),
-      Symbol("AES", "AES Corp", "AES", "STOCK"),
-      Symbol("AET", "Aetna Inc", "AET", "STOCK"),
-      Symbol("AFL", "AFLAC Inc", "AFL", "STOCK"),
-      Symbol("A", "Agilent Technologies Inc", "A", "STOCK"),
-      Symbol("GAS", "AGL Resources Inc.", "GAS", "STOCK"),
-      Symbol("APD", "Air Products & Chemicals Inc", "APD", "STOCK"),
-      Symbol("ARG", "Airgas Inc", "ARG", "STOCK"),
-      Symbol("AKAM", "Akamai Technologies Inc", "AKAM", "STOCK"),
-      Symbol("AA", "Alcoa Inc", "AA", "STOCK"),
-      Symbol("ATI", "Allegheny Technologies Inc", "ATI", "STOCK"),
-      Symbol("AGN", "Allergan Inc", "AGN", "STOCK"),
-      Symbol("ALL", "Allstate Corp", "ALL", "STOCK"),
-      Symbol("ALTR", "Altera Corp", "ALTR", "STOCK"),
-      Symbol("MO", "Altria Group Inc", "MO", "STOCK"),
-      Symbol("AMZN", "Amazon.com Inc", "AMZN", "STOCK"),
-      Symbol("AEE", "Ameren Corp", "AEE", "STOCK"),
-      Symbol("AEP", "American Electric Power", "AEP", "STOCK"),
-      Symbol("AXP", "American Express Co", "AXP", "STOCK"),
-      Symbol("AIG", "American Intl Group Inc", "AIG", "STOCK"),
-      Symbol("AMT", "American Tower Corp A", "AMT", "STOCK"),
-      Symbol("AMP", "Ameriprise Financial", "AMP", "STOCK"),
-      Symbol("ABC", "AmerisourceBergen Corp", "ABC", "STOCK"),
-      Symbol("AMGN", "Amgen Inc", "AMGN", "STOCK"),
-      Symbol("APH", "Amphenol Corp A", "APH", "STOCK"),
-      Symbol("APC", "Anadarko Petroleum Corp", "APC", "STOCK"),
-      Symbol("ADI", "Analog Devices Inc", "ADI", "STOCK"),
-      Symbol("AON", "Aon Corporation", "AON", "STOCK"),
-      Symbol("APA", "Apache Corporation", "APA", "STOCK"),
-      Symbol("AIV", "Apartment Investment & Mgmt", "AIV", "STOCK"),
-      Symbol("APOL", "Apollo Group Inc", "APOL", "STOCK"),
-      Symbol("AAPL", "Apple Inc.", "AAPL", "STOCK"),
-      Symbol("AMAT", "Applied Materials Inc", "AMAT", "STOCK"),
-      Symbol("ADM", "Archer-Daniels-Midland Co", "ADM", "STOCK"),
-      Symbol("AIZ", "Assurant Inc", "AIZ", "STOCK"),
-      Symbol("T", "AT&T Inc", "T", "STOCK"),
-      Symbol("ADSK", "Autodesk Inc", "ADSK", "STOCK"),
-      Symbol("ADP", "Automatic Data Processing", "ADP", "STOCK"),
-      Symbol("AN", "AutoNation Inc", "AN", "STOCK"),
-      Symbol("AZO", "AutoZone Inc", "AZO", "STOCK"),
-      Symbol("AVB", "AvalonBay Communities, Inc.", "AVB", "STOCK"),
-      Symbol("AVY", "Avery Dennison Corp", "AVY", "STOCK"),
-      Symbol("AVP", "Avon Products", "AVP", "STOCK"),
-      Symbol("BHI", "Baker Hughes Inc", "BHI", "STOCK"),
-      Symbol("BLL", "Ball Corp", "BLL", "STOCK"),
-      Symbol("BAC", "Bank of America Corp", "BAC", "STOCK"),
-      Symbol("BK", "The Bank of New York Mellon Corp.", "BK", "STOCK"),
-      Symbol("BCR", "Bard (C.R.) Inc.", "BCR", "STOCK"),
-      Symbol("BAX", "Baxter International Inc.", "BAX", "STOCK"),
-      Symbol("BBT", "BB&T Corporation", "BBT", "STOCK"),
-      Symbol("BEAM", "Beam Inc.", "BEAM", "STOCK"),
-      Symbol("BDX", "Becton Dickinson", "BDX", "STOCK"),
-      Symbol("BBBY", "Bed Bath & Beyond", "BBBY", "STOCK"),
-      Symbol("BMS", "Bemis Company", "BMS", "STOCK"),
-      Symbol("BRK.B", "Berkshire Hathaway", "BRK-B", "STOCK"),
-      Symbol("BBY", "Best Buy Co. Inc.", "BBY", "STOCK"),
-      Symbol("BIG", "Big Lots Inc.", "BIG", "STOCK"),
-      Symbol("BIIB", "BIOGEN IDEC Inc.", "BIIB", "STOCK"),
-      Symbol("BLK", "BlackRock", "BLK", "STOCK"),
-      Symbol("HRB", "Block H&R", "HRB", "STOCK"),
-      Symbol("BMC", "BMC Software", "BMC", "STOCK"),
-      Symbol("BA", "Boeing Company", "BA", "STOCK"),
-      Symbol("BWA", "BorgWarner", "BWA", "STOCK"),
-      Symbol("BXP", "Boston Properties", "BXP", "STOCK"),
-      Symbol("BSX", "Boston Scientific", "BSX", "STOCK"),
-      Symbol("BMY", "Bristol-Myers Squibb", "BMY", "STOCK"),
-      Symbol("BRCM", "Broadcom Corporation", "BRCM", "STOCK"),
-      Symbol("BF.B", "Brown-Forman Corporation", "BFB", "STOCK"),
-      Symbol("CHRW", "C. H. Robinson Worldwide", "CHRW", "STOCK"),
-      Symbol("CA", "CA, Inc.", "CA", "STOCK"),
-      Symbol("CVC", "Cablevision Systems Corp.", "CVC", "STOCK"),
-      Symbol("COG", "Cabot Oil & Gas", "COG", "STOCK"),
-      Symbol("CAM", "Cameron International Corp.", "CAM", "STOCK"),
-      Symbol("CPB", "Campbell Soup", "CPB", "STOCK"),
-      Symbol("COF", "Capital One Financial", "COF", "STOCK"),
-      Symbol("CAH", "Cardinal Health Inc.", "CAH", "STOCK"),
-      Symbol("CFN", "Carefusion", "CFN", "STOCK"),
-      Symbol("KMX", "Carmax Inc", "KMX", "STOCK"),
-      Symbol("CCL", "Carnival Corp.", "CCL", "STOCK"),
-      Symbol("CAT", "Caterpillar Inc.", "CAT", "STOCK"),
-      Symbol("CBG", "CBRE Group", "CBG", "STOCK"),
-      Symbol("CBS", "CBS Corp.", "CBS", "STOCK"),
-      Symbol("CELG", "Celgene Corp.", "CELG", "STOCK"),
-      Symbol("CNP", "CenterPoint Energy", "CNP", "STOCK"),
-      Symbol("CTL", "CenturyLink Inc", "CTL", "STOCK"),
-      Symbol("CERN", "Cerner", "CERN", "STOCK"),
-      Symbol("CF", "CF Industries Holdings Inc", "CF", "STOCK"),
-      Symbol("SCHW", "Charles Schwab", "SCHW", "STOCK"),
-      Symbol("CHK", "Chesapeake Energy", "CHK", "STOCK"),
-      Symbol("CVX", "Chevron Corp.", "CVX", "STOCK"),
-      Symbol("CB", "Chubb Corp.", "CB", "STOCK"),
-      Symbol("CI", "CIGNA Corp.", "CI", "STOCK"),
-      Symbol("CINF", "Cincinnati Financial", "CINF", "STOCK"),
-      Symbol("CTAS", "Cintas Corporation", "CTAS", "STOCK"),
-      Symbol("CSCO", "Cisco Systems", "CSCO", "STOCK"),
-      Symbol("C", "Citigroup Inc.", "C", "STOCK"),
-      Symbol("CTXS", "Citrix Systems", "CTXS", "STOCK"),
-      Symbol("CLF", "Cliffs Natural Resources", "CLF", "STOCK"),
-      Symbol("CLX", "Clorox Co.", "CLX", "STOCK"),
-      Symbol("CME", "CME Group Inc.", "CME", "STOCK"),
-      Symbol("CMS", "CMS Energy", "CMS", "STOCK"),
-      Symbol("COH", "Coach Inc.", "COH", "STOCK"),
-      Symbol("KO", "Coca Cola Co.", "KO", "STOCK"),
-      Symbol("CCE", "Coca-Cola Enterprises", "CCE", "STOCK"),
-      Symbol("CTSH", "Cognizant Technology Solutions", "CTSH", "STOCK"),
-      Symbol("CL", "Colgate-Palmolive", "CL", "STOCK"),
-      Symbol("CMCSA", "Comcast Corp.", "CMCSA", "STOCK"),
-      Symbol("CMA", "Comerica Inc.", "CMA", "STOCK"),
-      Symbol("CSC", "Computer Sciences Corp.", "CSC", "STOCK"),
-      Symbol("CAG", "ConAgra Foods Inc.", "CAG", "STOCK"),
-      Symbol("COP", "ConocoPhillips", "COP", "STOCK"),
-      Symbol("CNX", "CONSOL Energy Inc.", "CNX", "STOCK"),
-      Symbol("ED", "Consolidated Edison", "ED", "STOCK"),
-      Symbol("STZ", "Constellation Brands", "STZ", "STOCK"),
-      //Symbol("CEG","Constellation Energy Group","CEG","STOCK"),
-      Symbol("GLW", "Corning Inc.", "GLW", "STOCK"),
-      Symbol("COST", "Costco Co.", "COST", "STOCK"),
-      Symbol("CVH", "Coventry Health Care Inc.", "CVH", "STOCK"),
-      Symbol("COV", "Covidien plc", "COV", "STOCK"),
-      Symbol("CSX", "CSX Corp.", "CSX", "STOCK"),
-      Symbol("CMI", "Cummins Inc.", "CMI", "STOCK"),
-      Symbol("CVS", "CVS Caremark Corp.", "CVS", "STOCK"),
-      Symbol("DHI", "D. R. Horton", "DHI", "STOCK"),
-      Symbol("DHR", "Danaher Corp.", "DHR", "STOCK"),
-      Symbol("DRI", "Darden Restaurants", "DRI", "STOCK"),
-      Symbol("DVA", "DaVita Inc.", "DVA", "STOCK"),
-      Symbol("DF", "Dean Foods", "DF", "STOCK"),
-      Symbol("DE", "Deere & Co.", "DE", "STOCK"),
-      Symbol("DELL", "Dell Inc.", "DELL", "STOCK"),
-      Symbol("DNR", "Denbury Resources Inc.", "DNR", "STOCK"),
-      Symbol("XRAY", "Dentsply International", "XRAY", "STOCK"),
-      Symbol("DVN", "Devon Energy Corp.", "DVN", "STOCK"),
-      Symbol("DV", "DeVry, Inc.", "DV", "STOCK"),
-      Symbol("DO", "Diamond Offshore Drilling", "DO", "STOCK"),
-      Symbol("DTV", "DirecTV", "DTV", "STOCK"),
-      Symbol("DFS", "Discover Financial Services", "DFS", "STOCK"),
-      Symbol("DISCA", "Discovery Communications", "DISCA", "STOCK"),
-      Symbol("DLTR", "Dollar Tree", "DLTR", "STOCK"),
-      Symbol("D", "Dominion Resources", "D", "STOCK"),
-      Symbol("RRD", "Donnelley (R.R.) & Sons", "RRD", "STOCK"),
-      Symbol("DOV", "Dover Corp.", "DOV", "STOCK"),
-      Symbol("DOW", "Dow Chemical", "DOW", "STOCK"),
-      Symbol("DPS", "Dr Pepper Snapple Group", "DPS", "STOCK"),
-      Symbol("DTE", "DTE Energy Co.", "DTE", "STOCK"),
-      Symbol("DD", "Du Pont (E.I.)", "DD", "STOCK"),
-      Symbol("DUK", "Duke Energy", "DUK", "STOCK"),
-      Symbol("DNB", "Dun & Bradstreet", "DNB", "STOCK"),
-      Symbol("ETFC", "E-Trade", "ETFC", "STOCK"),
-      Symbol("EMN", "Eastman Chemical", "EMN", "STOCK"),
-      Symbol("ETN", "Eaton Corp.", "ETN", "STOCK"),
-      Symbol("EBAY", "eBay Inc.", "EBAY", "STOCK"),
-      Symbol("ECL", "Ecolab Inc.", "ECL", "STOCK"),
-      Symbol("EIX", "Edison Int'l", "EIX", "STOCK"),
-      Symbol("EW", "Edwards Lifesciences", "EW", "STOCK"),
-      Symbol("EP", "El Paso Corp.", "EP", "STOCK"),
-      Symbol("EA", "Electronic Arts", "EA", "STOCK"),
-      Symbol("EMC", "EMC Corp.", "EMC", "STOCK"),
-      Symbol("EMR", "Emerson Electric", "EMR", "STOCK"),
-      Symbol("ETR", "Entergy Corp.", "ETR", "STOCK"),
-      Symbol("EOG", "EOG Resources", "EOG", "STOCK"),
-      Symbol("EQT", "EQT Corporation", "EQT", "STOCK"),
-      Symbol("EFX", "Equifax Inc.", "EFX", "STOCK"),
-      Symbol("EQR", "Equity Residential", "EQR", "STOCK"),
-      Symbol("EL", "Estee Lauder Cos.", "EL", "STOCK"),
-      Symbol("EXC", "Exelon Corp.", "EXC", "STOCK"),
-      Symbol("EXPE", "Expedia Inc.", "EXPE", "STOCK"),
-      Symbol("EXPD", "Expeditors Int'l", "EXPD", "STOCK"),
-      Symbol("ESRX", "Express Scripts", "ESRX", "STOCK"),
-      Symbol("XOM", "Exxon Mobil Corp.", "XOM", "STOCK"),
-      Symbol("FFIV", "F5 Networks", "FFIV", "STOCK"),
-      Symbol("FDO", "Family Dollar Stores", "FDO", "STOCK"),
-      Symbol("FAST", "Fastenal Co", "FAST", "STOCK"),
-      Symbol("FII", "Federated Investors Inc.", "FII", "STOCK"),
-      Symbol("FDX", "FedEx Corporation", "FDX", "STOCK"),
-      Symbol("FIS", "Fidelity National Information Services", "FIS", "STOCK"),
-      Symbol("FITB", "Fifth Third Bancorp", "FITB", "STOCK"),
-      Symbol("FHN", "First Horizon National", "FHN", "STOCK"),
-      Symbol("FSLR", "First Solar Inc", "FSLR", "STOCK"),
-      Symbol("FE", "FirstEnergy Corp", "FE", "STOCK"),
-      Symbol("FISV", "Fiserv Inc", "FISV", "STOCK"),
-      Symbol("FLIR", "FLIR Systems", "FLIR", "STOCK"),
-      Symbol("FLS", "Flowserve Corporation", "FLS", "STOCK"),
-      Symbol("FLR", "Fluor Corp.", "FLR", "STOCK"),
-      Symbol("FMC", "FMC Corporation", "FMC", "STOCK"),
-      Symbol("FTI", "FMC Technologies Inc.", "FTI", "STOCK"),
-      Symbol("F", "Ford Motor", "F", "STOCK"),
-      Symbol("FRX", "Forest Laboratories", "FRX", "STOCK"),
-      Symbol("BEN", "Franklin Resources", "BEN", "STOCK"),
-      Symbol("FCX", "Freeport-McMoran Cp & Gld", "FCX", "STOCK"),
-      Symbol("FTR", "Frontier Communications", "FTR", "STOCK"),
-      Symbol("GME", "GameStop Corp.", "GME", "STOCK"),
-      Symbol("GCI", "Gannett Co.", "GCI", "STOCK"),
-      Symbol("GPS", "Gap (The)", "GPS", "STOCK"),
-      Symbol("GD", "General Dynamics", "GD", "STOCK"),
-      Symbol("GE", "General Electric", "GE", "STOCK"),
-      Symbol("GIS", "General Mills", "GIS", "STOCK"),
-      Symbol("GPC", "Genuine Parts", "GPC", "STOCK"),
-      Symbol("GNW", "Genworth Financial Inc.", "GNW", "STOCK"),
-      Symbol("GILD", "Gilead Sciences", "GILD", "STOCK"),
-      Symbol("GS", "Goldman Sachs Group", "GS", "STOCK"),
-      Symbol("GR", "Goodrich Corporation", "GR", "STOCK"),
-      Symbol("GT", "Goodyear Tire & Rubber", "GT", "STOCK"),
-      Symbol("GOOG", "Google Inc.", "GOOG", "STOCK"),
-      Symbol("GWW", "Grainger (W.W.) Inc.", "GWW", "STOCK"),
-      Symbol("HAL", "Halliburton Co.", "HAL", "STOCK"),
-      Symbol("HOG", "Harley-Davidson", "HOG", "STOCK"),
-      Symbol("HAR", "Harman Int'l Industries", "HAR", "STOCK"),
-      Symbol("HRS", "Harris Corporation", "HRS", "STOCK"),
-      Symbol("HIG", "Hartford Financial Svc.Gp.", "HIG", "STOCK"),
-      Symbol("HAS", "Hasbro Inc.", "HAS", "STOCK"),
-      Symbol("HCP", "HCP Inc.", "HCP", "STOCK"),
-      Symbol("HCN", "Health Care REIT", "HCN", "STOCK"),
-      Symbol("HNZ", "Heinz (H.J.)", "HNZ", "STOCK"),
-      Symbol("HP", "Helmerich & Payne", "HP", "STOCK"),
-      Symbol("HES", "Hess Corporation", "HES", "STOCK"),
-      Symbol("HPQ", "Hewlett-Packard", "HPQ", "STOCK"),
-      Symbol("HD", "Home Depot", "HD", "STOCK"),
-      Symbol("HON", "Honeywell Int'l Inc.", "HON", "STOCK"),
-      Symbol("HRL", "Hormel Foods Corp.", "HRL", "STOCK"),
-      Symbol("HSP", "Hospira Inc.", "HSP", "STOCK"),
-      Symbol("HST", "Host Hotels & Resorts", "HST", "STOCK"),
-      Symbol("HCBK", "Hudson City Bancorp", "HCBK", "STOCK"),
-      Symbol("HUM", "Humana Inc.", "HUM", "STOCK"),
-      Symbol("HBAN", "Huntington Bancshares", "HBAN", "STOCK"),
-      Symbol("ITW", "Illinois Tool Works", "ITW", "STOCK"),
-      Symbol("TEG", "Integrys Energy Group Inc.", "TEG", "STOCK"),
-      Symbol("INTC", "Intel Corp.", "INTC", "STOCK"),
-      Symbol("ICE", "IntercontinentalExchange Inc.", "ICE", "STOCK"),
-      Symbol("IBM", "International Bus. Machines", "IBM", "STOCK"),
-      Symbol("IFF", "International Flav/Frag", "IFF", "STOCK"),
-      Symbol("IGT", "International Game Technology", "IGT", "STOCK"),
-      Symbol("IP", "International Paper", "IP", "STOCK"),
-      Symbol("IPG", "Interpublic Group", "IPG", "STOCK"),
-      Symbol("INTU", "Intuit Inc.", "INTU", "STOCK"),
-      Symbol("ISRG", "Intuitive Surgical Inc.", "ISRG", "STOCK"),
-      Symbol("IVZ", "Invesco Ltd.", "IVZ", "STOCK"),
-      Symbol("IRM", "Iron Mountain Incorporated", "IRM", "STOCK"),
-      //Symbol("XYL","Xylem Inc.","XYL","STOCK"),
-      Symbol("JBL", "Jabil Circuit", "JBL", "STOCK"),
-      Symbol("JEC", "Jacobs Engineering Group", "JEC", "STOCK"),
-      Symbol("CBE", "Cooper Industries", "CBE", "STOCK"),
-      Symbol("JDSU", "JDS Uniphase Corp.", "JDSU", "STOCK"),
-      Symbol("JNJ", "Johnson & Johnson", "JNJ", "STOCK"),
-      Symbol("JCI", "Johnson Controls", "JCI", "STOCK"),
-      Symbol("JOY", "Joy Global Inc.", "JOY", "STOCK"),
-      Symbol("JPM", "JPMorgan Chase & Co.", "JPM", "STOCK"),
-      Symbol("JNPR", "Juniper Networks", "JNPR", "STOCK"),
-      Symbol("K", "Kellogg Co.", "K", "STOCK"),
-      Symbol("KEY", "KeyCorp", "KEY", "STOCK"),
-      Symbol("KMB", "Kimberly-Clark", "KMB", "STOCK"),
-      Symbol("KIM", "Kimco Realty", "KIM", "STOCK"),
-      Symbol("KLAC", "KLA-Tencor Corp.", "KLAC", "STOCK"),
-      Symbol("KSS", "Kohl's Corp.", "KSS", "STOCK"),
-      Symbol("KFT", "Kraft Foods Inc-A", "KFT", "STOCK"),
-      Symbol("KR", "Kroger Co.", "KR", "STOCK"),
-      Symbol("LLL", "L-3 Communications Holdings", "LLL", "STOCK"),
-      Symbol("LH", "Laboratory Corp. of America Holding", "LH", "STOCK"),
-      Symbol("LM", "Legg Mason", "LM", "STOCK"),
-      Symbol("LEG", "Leggett & Platt", "LEG", "STOCK"),
-      Symbol("LEN", "Lennar Corp.", "LEN", "STOCK"),
-      Symbol("LUK", "Leucadia National Corp.", "LUK", "STOCK"),
-      Symbol("LXK", "Lexmark Int'l Inc", "LXK", "STOCK"),
-      Symbol("LIFE", "Life Technologies", "LIFE", "STOCK"),
-      Symbol("LLY", "Lilly (Eli) & Co.", "LLY", "STOCK"),
-      Symbol("LTD", "Limited Brands Inc.", "LTD", "STOCK"),
-      Symbol("LNC", "Lincoln National", "LNC", "STOCK"),
-      Symbol("LLTC", "Linear Technology Corp.", "LLTC", "STOCK"),
-      Symbol("LMT", "Lockheed Martin Corp.", "LMT", "STOCK"),
-      Symbol("L", "Loews Corp.", "L", "STOCK"),
-      Symbol("LO", "Lorillard Inc.", "LO", "STOCK"),
-      Symbol("LOW", "Lowe's Cos.", "LOW", "STOCK"),
-      Symbol("LSI", "LSI Corporation", "LSI", "STOCK"),
-      Symbol("MTB", "M&T Bank Corp.", "MTB", "STOCK"),
-      Symbol("M", "Macy's Inc.", "M", "STOCK"),
-      Symbol("MRO", "Marathon Oil Corp.", "MRO", "STOCK"),
-      Symbol("MPC", "Marathon Petroleum", "MPC", "STOCK"),
-      Symbol("MAR", "Marriott Int'l.", "MAR", "STOCK"),
-      Symbol("MMC", "Marsh & McLennan", "MMC", "STOCK"),
-      Symbol("MAS", "Masco Corp.", "MAS", "STOCK"),
-      Symbol("ANR", "Alpha Natural Resources", "ANR", "STOCK"),
-      Symbol("MA", "Mastercard Inc.", "MA", "STOCK"),
-      Symbol("MAT", "Mattel Inc.", "MAT", "STOCK"),
-      Symbol("MKC", "McCormick & Co.", "MKC", "STOCK"),
-      Symbol("MCD", "McDonald's Corp.", "MCD", "STOCK"),
-      Symbol("MHP", "McGraw-Hill", "MHP", "STOCK"),
-      Symbol("MCK", "McKesson Corp.", "MCK", "STOCK"),
-      Symbol("MJN", "Mead Johnson", "MJN", "STOCK"),
-      Symbol("MWV", "MeadWestvaco Corporation", "MWV", "STOCK"),
-      //Symbol("MHS","Medco Health Solutions Inc.","MHS","STOCK"),
-      Symbol("MDT", "Medtronic Inc.", "MDT", "STOCK"),
-      Symbol("MRK", "Merck & Co.", "MRK", "STOCK"),
-      Symbol("MET", "MetLife Inc.", "MET", "STOCK"),
-      Symbol("PCS", "MetroPCS Communications Inc.", "PCS", "STOCK"),
-      Symbol("MCHP", "Microchip Technology", "MCHP", "STOCK"),
-      Symbol("MU", "Micron Technology", "MU", "STOCK"),
-      Symbol("MSFT", "Microsoft Corp.", "MSFT", "STOCK"),
-      Symbol("MOLX", "Molex Inc.", "MOLX", "STOCK"),
-      Symbol("TAP", "Molson Coors Brewing Company", "TAP", "STOCK"),
-      Symbol("MON", "Monsanto Co.", "MON", "STOCK"),
-      Symbol("MCO", "Moody's Corp", "MCO", "STOCK"),
-      Symbol("MS", "Morgan Stanley", "MS", "STOCK"),
-      Symbol("MOS", "The Mosaic Company", "MOS", "STOCK"),
-      Symbol("MMI", "Motorola Mobility Holdings Inc.", "MMI", "STOCK"),
-      Symbol("MSI", "Motorola Solutions Inc.", "MSI", "STOCK"),
-      Symbol("MUR", "Murphy Oil", "MUR", "STOCK"),
-      Symbol("MYL", "Mylan Inc.", "MYL", "STOCK"),
-      Symbol("NBR", "Nabors Industries Ltd.", "NBR", "STOCK"),
-      Symbol("NDAQ", "NASDAQ OMX Group", "NDAQ", "STOCK"),
-      Symbol("NOV", "National Oilwell Varco Inc.", "NOV", "STOCK"),
-      Symbol("NTAP", "NetApp", "NTAP", "STOCK"),
-      Symbol("NFLX", "NetFlix Inc.", "NFLX", "STOCK"),
-      Symbol("NWL", "Newell Rubbermaid Co.", "NWL", "STOCK"),
-      Symbol("NFX", "Newfield Exploration Co", "NFX", "STOCK"),
-      Symbol("NEM", "Newmont Mining Corp. (Hldg. Co.)", "NEM", "STOCK"),
-      Symbol("NWSA", "News Corporation", "NWSA", "STOCK"),
-      Symbol("NEE", "NextEra Energy Resources", "NEE", "STOCK"),
-      Symbol("NKE", "NIKE Inc.", "NKE", "STOCK"),
-      Symbol("NI", "NiSource Inc.", "NI", "STOCK"),
-      Symbol("NE", "Noble Corp", "NE", "STOCK"),
-      Symbol("NBL", "Noble Energy Inc", "NBL", "STOCK"),
-      Symbol("JWN", "Nordstrom", "JWN", "STOCK"),
-      Symbol("NSC", "Norfolk Southern Corp.", "NSC", "STOCK"),
-      Symbol("NTRS", "Northern Trust Corp.", "NTRS", "STOCK"),
-      Symbol("NOC", "Northrop Grumman Corp.", "NOC", "STOCK"),
-      Symbol("NU", "Northeast Utilities", "NU", "STOCK"),
-      Symbol("CMG", "Chipotle Mexican Grill", "CMG", "STOCK"),
-      Symbol("NVLS", "Novellus Systems", "NVLS", "STOCK"),
-      Symbol("NRG", "NRG Energy", "NRG", "STOCK"),
-      Symbol("NUE", "Nucor Corp.", "NUE", "STOCK"),
-      Symbol("NVDA", "Nvidia Corporation", "NVDA", "STOCK"),
-      Symbol("NYX", "NYSE Euronext", "NYX", "STOCK"),
-      Symbol("ORLY", "O'Reilly Automotive", "ORLY", "STOCK"),
-      Symbol("OXY", "Occidental Petroleum", "OXY", "STOCK"),
-      Symbol("OMC", "Omnicom Group", "OMC", "STOCK"),
-      Symbol("OKE", "ONEOK", "OKE", "STOCK"),
-      Symbol("ORCL", "Oracle Corp.", "ORCL", "STOCK"),
-      Symbol("OI", "Owens-Illinois Inc", "OI", "STOCK"),
-      Symbol("PCAR", "PACCAR Inc.", "PCAR", "STOCK"),
-      Symbol("IR", "Ingersoll-Rand PLC", "IR", "STOCK"),
-      Symbol("PLL", "Pall Corp.", "PLL", "STOCK"),
-      Symbol("PH", "Parker-Hannifin", "PH", "STOCK"),
-      Symbol("PDCO", "Patterson Companies", "PDCO", "STOCK"),
-      Symbol("PAYX", "Paychex Inc.", "PAYX", "STOCK"),
-      Symbol("BTU", "Peabody Energy", "BTU", "STOCK"),
-      Symbol("JCP", "Penney (J.C.)", "JCP", "STOCK"),
-      Symbol("PBCT", "People's United Bank", "PBCT", "STOCK"),
-      Symbol("POM", "Pepco Holdings Inc.", "POM", "STOCK"),
-      Symbol("PEP", "PepsiCo Inc.", "PEP", "STOCK"),
-      Symbol("PKI", "PerkinElmer", "PKI", "STOCK"),
-      Symbol("PRGO", "Perrigo", "PRGO", "STOCK"),
-      Symbol("PFE", "Pfizer Inc.", "PFE", "STOCK"),
-      Symbol("PCG", "PG&E Corp.", "PCG", "STOCK"),
-      Symbol("PM", "Philip Morris International", "PM", "STOCK"),
-      Symbol("PNW", "Pinnacle West Capital", "PNW", "STOCK"),
-      Symbol("PXD", "Pioneer Natural Resources", "PXD", "STOCK"),
-      Symbol("PBI", "Pitney-Bowes", "PBI", "STOCK"),
-      Symbol("PCL", "Plum Creek Timber Co.", "PCL", "STOCK"),
-      Symbol("PNC", "PNC Financial Services", "PNC", "STOCK"),
-      Symbol("RL", "Polo Ralph Lauren Corp.", "RL", "STOCK"),
-      Symbol("PPG", "PPG Industries", "PPG", "STOCK"),
-      Symbol("PPL", "PPL Corp.", "PPL", "STOCK"),
-      Symbol("PX", "Praxair Inc.", "PX", "STOCK"),
-      Symbol("PCP", "Precision Castparts", "PCP", "STOCK"),
-      Symbol("PCLN", "Priceline.com Inc", "PCLN", "STOCK"),
-      Symbol("PFG", "Principal Financial Group", "PFG", "STOCK"),
-      Symbol("PG", "Procter & Gamble", "PG", "STOCK"),
-      //Symbol("PGN", "Progress Energy Inc.", "PGN", "STOCK"),
-      Symbol("PGR", "Progressive Corp.", "PGR", "STOCK"),
-      Symbol("PLD", "ProLogis", "PLD", "STOCK"),
-      Symbol("PRU", "Prudential Financial", "PRU", "STOCK"),
-      Symbol("PEG", "Public Serv. Enterprise Inc.", "PEG", "STOCK"),
-      Symbol("PSA", "Public Storage", "PSA", "STOCK"),
-      Symbol("PHM", "Pulte Homes Inc.", "PHM", "STOCK"),
-      Symbol("QEP", "QEP Resources", "QEP", "STOCK"),
-      Symbol("PWR", "Quanta Services Inc.", "PWR", "STOCK"),
-      Symbol("QCOM", "QUALCOMM Inc.", "QCOM", "STOCK"),
-      Symbol("DGX", "Quest Diagnostics", "DGX", "STOCK"),
-      Symbol("RRC", "Range Resources Corp.", "RRC", "STOCK"),
-      Symbol("RTN", "Raytheon Co.", "RTN", "STOCK"),
-      Symbol("RHT", "Red Hat Inc.", "RHT", "STOCK"),
-      Symbol("RF", "Regions Financial Corp.", "RF", "STOCK"),
-      Symbol("RSG", "Republic Services Inc", "RSG", "STOCK"),
-      Symbol("RAI", "Reynolds American Inc.", "RAI", "STOCK"),
-      Symbol("RHI", "Robert Half International", "RHI", "STOCK"),
-      Symbol("ROK", "Rockwell Automation Inc.", "ROK", "STOCK"),
-      Symbol("COL", "Rockwell Collins", "COL", "STOCK"),
-      Symbol("ROP", "Roper Industries", "ROP", "STOCK"),
-      Symbol("ROST", "Ross Stores Inc.", "ROST", "STOCK"),
-      Symbol("RDC", "Rowan Cos.", "RDC", "STOCK"),
-      Symbol("R", "Ryder System", "R", "STOCK"),
-      Symbol("SWY", "Safeway Inc.", "SWY", "STOCK"),
-      Symbol("SAI", "SAIC", "SAI", "STOCK"),
-      Symbol("CRM", "Salesforce.com", "CRM", "STOCK"),
-      Symbol("SNDK", "SanDisk Corporation", "SNDK", "STOCK"),
-      Symbol("SLE", "Sara Lee Corp.", "SLE", "STOCK"),
-      Symbol("SCG", "SCANA Corp", "SCG", "STOCK"),
-      Symbol("SLB", "Schlumberger Ltd.", "SLB", "STOCK"),
-      Symbol("SNI", "Scripps Networks Interactive Inc.", "SNI", "STOCK"),
-      Symbol("SEE", "Sealed Air Corp.(New)", "SEE", "STOCK"),
-      Symbol("SHLD", "Sears Holdings Corporation", "SHLD", "STOCK"),
-      Symbol("SRE", "Sempra Energy", "SRE", "STOCK"),
-      Symbol("SHW", "Sherwin-Williams", "SHW", "STOCK"),
-      Symbol("SIAL", "Sigma-Aldrich", "SIAL", "STOCK"),
-      Symbol("SPG", "Simon Property Group Inc", "SPG", "STOCK"),
-      Symbol("SLM", "SLM Corporation", "SLM", "STOCK"),
-      Symbol("SJM", "Smucker (J.M.)", "SJM", "STOCK"),
-      Symbol("SNA", "Snap-On Inc.", "SNA", "STOCK"),
-      Symbol("SO", "Southern Co.", "SO", "STOCK"),
-      Symbol("LUV", "Southwest Airlines", "LUV", "STOCK"),
-      Symbol("SWN", "Southwestern Energy", "SWN", "STOCK"),
-      Symbol("SE", "Spectra Energy Corp.", "SE", "STOCK"),
-      Symbol("S", "Sprint Nextel Corp.", "S", "STOCK"),
-      Symbol("STJ", "St Jude Medical", "STJ", "STOCK"),
-      Symbol("SWK", "Stanley Black & Decker", "SWK", "STOCK"),
-      Symbol("SPLS", "Staples Inc.", "SPLS", "STOCK"),
-      Symbol("SBUX", "Starbucks Corp.", "SBUX", "STOCK"),
-      Symbol("HOT", "Starwood Hotels & Resorts", "HOT", "STOCK"),
-      Symbol("STT", "State Street Corp.", "STT", "STOCK"),
-      Symbol("SRCL", "Stericycle Inc", "SRCL", "STOCK"),
-      Symbol("SYK", "Stryker Corp.", "SYK", "STOCK"),
-      Symbol("SUN", "Sunoco Inc.", "SUN", "STOCK"),
-      Symbol("STI", "SunTrust Banks", "STI", "STOCK"),
-      Symbol("SVU", "Supervalu Inc.", "SVU", "STOCK"),
-      Symbol("SYMC", "Symantec Corp.", "SYMC", "STOCK"),
-      Symbol("SYY", "Sysco Corp.", "SYY", "STOCK"),
-      Symbol("TROW", "T. Rowe Price Group", "TROW", "STOCK"),
-      Symbol("TGT", "Target Corp.", "TGT", "STOCK"),
-      Symbol("TEL", "TE Connectivity Ltd.", "TEL", "STOCK"),
-      Symbol("TE", "TECO Energy", "TE", "STOCK"),
-      Symbol("THC", "Tenet Healthcare Corp.", "THC", "STOCK"),
-      Symbol("TDC", "Teradata Corp.", "TDC", "STOCK"),
-      Symbol("TER", "Teradyne Inc.", "TER", "STOCK"),
-      Symbol("TSO", "Tesoro Petroleum Co.", "TSO", "STOCK"),
-      Symbol("TXN", "Texas Instruments", "TXN", "STOCK"),
-      Symbol("TXT", "Textron Inc.", "TXT", "STOCK"),
-      Symbol("HSY", "The Hershey Company", "HSY", "STOCK"),
-      Symbol("TRV", "The Travelers Companies Inc.", "TRV", "STOCK"),
-      Symbol("TMO", "Thermo Fisher Scientific", "TMO", "STOCK"),
-      Symbol("TIF", "Tiffany & Co.", "TIF", "STOCK"),
-      Symbol("TWX", "Time Warner Inc.", "TWX", "STOCK"),
-      Symbol("TWC", "Time Warner Cable Inc.", "TWC", "STOCK"),
-      Symbol("TIE", "Titanium Metals Corp", "TIE", "STOCK"),
-      Symbol("TJX", "TJX Companies Inc.", "TJX", "STOCK"),
-      Symbol("TMK", "Torchmark Corp.", "TMK", "STOCK"),
-      Symbol("TSS", "Total System Services", "TSS", "STOCK"),
-      //Symbol("TRIP","TripAdvisor","TRIP","STOCK"),
-      Symbol("TSN", "Tyson Foods", "TSN", "STOCK"),
-      Symbol("TYC", "Tyco International", "TYC", "STOCK"),
-      Symbol("USB", "U.S. Bancorp", "USB", "STOCK"),
-      Symbol("UNP", "Union Pacific", "UNP", "STOCK"),
-      Symbol("UNH", "United Health Group Inc.", "UNH", "STOCK"),
-      Symbol("UPS", "United Parcel Service", "UPS", "STOCK"),
-      Symbol("X", "United States Steel Corp.", "X", "STOCK"),
-      Symbol("UTX", "United Technologies", "UTX", "STOCK"),
-      Symbol("UNM", "Unum Group", "UNM", "STOCK"),
-      Symbol("URBN", "Urban Outfitters", "URBN", "STOCK"),
-      Symbol("VFC", "V.F. Corp.", "VFC", "STOCK"),
-      Symbol("VLO", "Valero Energy", "VLO", "STOCK"),
-      Symbol("VAR", "Varian Medical Systems", "VAR", "STOCK"),
-      Symbol("VTR", "Ventas Inc", "VTR", "STOCK"),
-      Symbol("VRSN", "Verisign Inc.", "VRSN", "STOCK"),
-      Symbol("VZ", "Verizon Communications", "VZ", "STOCK"),
-      //Symbol("VIAB","Viacom Inc.","VIAB","STOCK"),
-      Symbol("V", "Visa Inc.", "V", "STOCK"),
-      Symbol("VNO", "Vornado Realty Trust", "VNO", "STOCK"),
-      Symbol("VMC", "Vulcan Materials", "VMC", "STOCK"),
-      Symbol("WMT", "Wal-Mart Stores", "WMT", "STOCK"),
-      Symbol("WAG", "Walgreen Co.", "WAG", "STOCK"),
-      Symbol("DIS", "Walt Disney Co.", "DIS", "STOCK"),
-      Symbol("WPO", "Washington Post Co B", "WPO", "STOCK"),
-      Symbol("WM", "Waste Management Inc.", "WM", "STOCK"),
-      Symbol("WAT", "Waters Corporation", "WAT", "STOCK"),
-      Symbol("WPI", "Watson Pharmaceuticals", "WPI", "STOCK"),
-      Symbol("WLP", "WellPoint Inc.", "WLP", "STOCK"),
-      Symbol("WFC", "Wells Fargo", "WFC", "STOCK"),
-      Symbol("WDC", "Western Digital", "WDC", "STOCK"),
-      Symbol("WU", "Western Union Co", "WU", "STOCK"),
-      Symbol("WY", "Weyerhaeuser Corp.", "WY", "STOCK"),
-      Symbol("WHR", "Whirlpool Corp.", "WHR", "STOCK"),
-      Symbol("WFM", "Whole Foods Market", "WFM", "STOCK"),
-      Symbol("WMB", "Williams Cos.", "WMB", "STOCK"),
-      Symbol("WIN", "Windstream Corporation", "WIN", "STOCK"),
-      Symbol("WEC", "Wisconsin Energy Corporation", "WEC", "STOCK"),
-      //Symbol("WPX","WPX Energy, Inc.","WPX","STOCK"),
-      Symbol("WYN", "Wyndham Worldwide", "WYN", "STOCK"),
-      Symbol("WYNN", "Wynn Resorts Ltd", "WYNN", "STOCK"),
-      Symbol("XEL", "Xcel Energy Inc", "XEL", "STOCK"),
-      Symbol("XRX", "Xerox Corp.", "XRX", "STOCK"),
-      Symbol("XLNX", "Xilinx Inc", "XLNX", "STOCK"),
-      Symbol("XL", "XL Capital", "XL", "STOCK"),
-      Symbol("YHOO", "Yahoo Inc.", "YHOO", "STOCK"),
-      Symbol("YUM", "Yum! Brands Inc", "YUM", "STOCK"),
-      Symbol("ZMH", "Zimmer Holdings", "ZMH", "STOCK"),
-      Symbol("ZION", "Zions Bancorp", "ZION", "STOCK")
-    )
+  override def loadAllStockTickers(): Seq[Symbol] = {
+    LOG.debug("Loading all tickers")
+    val stockTickerColl = mongoDB.getCollection("stockTickerColl")
+    val results: Iterable[DBObject] = stockTickerColl.find()
+    val symbols = results.map { entity =>
+      Symbol(key = Some(entity.get("_id").toString),
+        name = entity.get("n").toString,
+        desc = entity.get("d").toString,
+        remoteId = entity.get("rid").toString,
+        symbolType = entity.get("st").toString,
+        active = entity.get("a").toString)
+    }
+    symbols.toSeq
   }
 
+  override def saveAllSymbols(stockTickers: Iterable[Symbol]) {
+    LOG.debug("Saving all tickers")
+
+    val tickersToInsert = stockTickers.map { symbol =>
+      val entity = new BasicDBObject()
+      entity.put("n", symbol.name)
+      entity.put("d", symbol.desc)
+      entity.put("rid", symbol.remoteId)
+      entity.put("st", symbol.symbolType)
+      entity.put("a", symbol.active)
+      entity.asInstanceOf[DBObject]
+    }.toList
+
+    val stockTickerColl = mongoDB.getCollection("stockTickerColl")
+    stockTickerColl.insert(tickersToInsert)
+  }
+
+  override def updateSymbol(stockTicker: Symbol) = stockTicker.key.map { k =>
+    LOG.debug("Updating {}", stockTicker)
+    val stockTickerColl = mongoDB.getCollection("stockTickerColl")
+    val updateCriteria = new BasicDBObject()
+    updateCriteria.append("_id", new ObjectId(k))
+
+    val entity = new BasicDBObject()
+    entity.put("n", stockTicker.name)
+    entity.put("d", stockTicker.desc)
+    entity.put("rid", stockTicker.remoteId)
+    entity.put("st", stockTicker.symbolType)
+    entity.put("a", stockTicker.active)
+    entity.put("_id", new ObjectId(k))
+
+    stockTickerColl.update(updateCriteria, entity)
+  }
 }

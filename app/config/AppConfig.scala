@@ -16,7 +16,7 @@ import services._
 
 object AppConfig {
   lazy val fundamentalDAO:StatDAO = new StatDAOImpl(mongoDB)
-  lazy val symbolDAO:SymbolDAO = new SymbolDAOImpl
+  lazy val symbolDAO:SymbolDAO = new SymbolDAOImpl(mongoDB)
 
   lazy val statService:StatService = new StatServiceImpl(fundamentalDAO)
   lazy val statUpdateService:StatUpdateService = new StatUpdateServiceImpl(symbolDAO,fundamentalDAO)

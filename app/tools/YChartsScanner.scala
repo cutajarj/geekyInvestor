@@ -86,8 +86,8 @@ object YChartsScanner {
     val pw = new PrintWriter(new FileOutputStream(new File("output.txt"), true))
     val ts = Seq[(String, String)](("eps_ttm", "EPSTTM"), ("book_value_per_share", "BVPS"), /*("shares_outstanding", "SO"),*/ ("revenues_ttm", "RTTM"),("net_income_ttm", "NITTM"), ("gross_profit_ttm", "GPTTM") /*,("revenue_per_share", "RPSTTM")*/)
     //val x = io.Source.fromFile("snp500.txt")
-    val symbolDAO = new SymbolDAOImpl()
-    val symbols = symbolDAO.loadAllSymbols()
+    val symbolDAO = new SymbolDAOImpl(mongoDB)
+    val symbols = symbolDAO.loadAllStockTickers()
     symbols.foreach { s =>
       ts.foreach { t =>
         val listOfData = readDataFor(s.name, t)

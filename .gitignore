@@ -5,3 +5,11 @@ target
 tmp
 .history
 dist
+.settings
+.idea
+.target
+target
+bin
+.project
+.classpath
+.cache

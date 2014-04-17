@@ -53,7 +53,7 @@ class StatUpdateServiceImpl(val symbolDAO: SymbolDAO, val statDAO: StatDAO) exte
 
   def updateStock(updateLatest: Boolean): Seq[(String, Double, Double, LocalDate)] = {
     LOG.info("Starting stats update...")
-    val allSymbols = symbolDAO.loadAllSymbols()
+    val allSymbols = symbolDAO.loadAllStockTickers()
     LOG.info("Using {} symbols in total.", allSymbols.size)
     val allSymbolTypes = symbolDAO.loadAllFundamentalTypes()
     val setToUpdate = allSymbolTypes.filter(_.remoteId.isDefined).foldLeft(Set[Symbol]()) { (setToUpdate, t) =>
@@ -73,15 +73,15 @@ class StatUpdateServiceImpl(val symbolDAO: SymbolDAO, val statDAO: StatDAO) exte
 
     Days.daysBetween(dbDate, mrqDate).getDays match {
       case x if (x < 10) =>
-        LOG.warn("Symbol {} type {} latest is less than 10 days from online's mrq. Overwritting value.",onlineStat.symbol.name,stValue._1.name)
+        LOG.warn(s"Symbol ${onlineStat.symbol.name} type ${stValue._1.name} latest is less than 10 days from online's mrq. Overwritting value.")
         LOG.warn("DB timestamp, value, online mrq, value, tsdiff {}",Array(dbLatest.timeStamp,dbLatest.value,onlineStat.mrq,stValue._2,x))
         stValue._2.map( v=> statDAO.update(dbLatest.copy(timeStamp = onlineStat.mrq, value = v)) )
       case x if (x < 75) =>
-        LOG.warn("Symbol {} type {} latest is less than 75 days from online's mrq. Creating new record.",onlineStat.symbol.name,stValue._1.name)
+        LOG.warn(s"Symbol ${onlineStat.symbol.name} type ${stValue._1.name} latest is less than 75 days from online's mrq. Creating new record.")
         LOG.warn("DB timestamp, value, online mrq, value, tsdiff {}",Array(dbLatest.timeStamp,dbLatest.value,onlineStat.mrq,stValue._2,x))
         stValue._2.map( v=> statDAO.save(dbLatest.copy(timeStamp = onlineStat.mrq, value = v)) )
       case x if (x > 105) =>
-        LOG.warn("Symbol {} type {} latest is more than 105 days from online's mrq. Creating new record.",onlineStat.symbol.name,stValue._1.name)
+        LOG.warn("Symbol ${onlineStat.symbol.name} type ${stValue._1.name} latest is more than 105 days from online's mrq. Creating new record.")
         LOG.warn("DB timestamp, value, online mrq, value, tsdiff {}",Array(dbLatest.timeStamp,dbLatest.value,onlineStat.mrq,stValue._2,x))
         stValue._2.map( v=> statDAO.save (dbLatest.copy(timeStamp = onlineStat.mrq, value = v)) )
       case _ =>

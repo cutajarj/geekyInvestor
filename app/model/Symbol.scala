@@ -8,6 +8,5 @@ package model
  * To change this template use File | Settings | File Templates.
  */
 
-case class Symbol(name: String, desc: String, remoteId: String, symbolType: String) {
+case class Symbol(name: String, desc: String, remoteId: String, symbolType: String, key: Option[String] = None, active: String = "A")
 
-}
