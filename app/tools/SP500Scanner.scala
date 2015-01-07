@@ -1,20 +1,22 @@
 package tools
 
 import com.mongodb.MongoURI
-import persistance.SymbolDAOImpl
+import persistance.CompanyDAOImpl
+import model.Company
+import org.joda.time.LocalDate
 
-case class Constituent(name: String, desc: String)
+case class Constituent(ric: String, name: String, cik: String)
 
 object SP500Scanner {
 
   val mongoDB = {
-    val mongoURI = new MongoURI("mongodb://127.0.0.1:27017/geekInvestor")
+    val mongoURI = new MongoURI("mongodb://127.0.0.1:27017/openFundamentals")
     val db = mongoURI.connectDB()
     Option(mongoURI.getUsername).foreach(username => db.authenticate(username, mongoURI.getPassword))
     db
   }
 
-  val symbolDAO = new SymbolDAOImpl(mongoDB)
+  val companyDAO = new CompanyDAOImpl(mongoDB)
 
   def main(args: Array[String]) = {
     val url = "http://en.wikipedia.org/wiki/List_of_S%26P_500_companies"
@@ -31,36 +33,38 @@ object SP500Scanner {
         grouping.take(grouping.size - 1) :+ (grouping.last + row)
       }
     }
-    val wikiTickers = tableGrouped.tail.flatMap { group =>
+    val wikiCompanies = tableGrouped.tail.flatMap { group =>
       val uptoTicker = group.replace("<tr><td>", "").dropWhile(_ != '>').drop(1)
       val tickerName = uptoTicker.takeWhile(_ != '<').trim
       val uptoDesc = uptoTicker.dropWhile(_ != '<').drop(16).dropWhile(_ != '>').drop(1)
       val tickerDesc = uptoDesc.takeWhile(_ != '<').trim
-      Option(tickerName).filterNot(_.isEmpty()).map(Constituent(_, tickerDesc))
+      val cik = uptoDesc.split("<td>").last.replace("</td>", "").trim
+      Option(tickerName).filterNot(_.isEmpty()).map(Constituent(_, tickerDesc, cik))
     }
-    println(s"All tickers loaded from wiki size ${wikiTickers.size}")
-    val dbTickers = symbolDAO.loadAllStockTickers.filter(_.active=="A")
-    println(s"All tickers loaded from db size ${dbTickers.size}")
-    merge(wikiTickers, dbTickers)
+    println(s"All tickers loaded from wiki size ${wikiCompanies.size}")
+
+    val dbCompanies = companyDAO.loadAllCompanies.filter(_.active == "A")
+    println(s"All tickers loaded from db size ${dbCompanies.size}")
+    merge(wikiCompanies, dbCompanies)
   }
 
-  def merge(wikiTickers: Seq[Constituent], dbTickers: Seq[model.Symbol]) {
-    val wikiNames = wikiTickers.map(_.name).toSet
-    val dbNames = dbTickers.map(_.name).toSet
-    val wikiNamesToAdd = wikiNames -- dbNames
-    val dbNamesToDisable = dbNames -- wikiNames
-    val tickersToAdd = wikiNamesToAdd.flatMap { name =>
-      wikiTickers.filter(_.name == name).map(t =>
-        model.Symbol(name = t.name, desc = t.desc, remoteId = t.name, symbolType = "STOCK"))
-    }
-    val tickersToRemove = dbNamesToDisable.flatMap { name =>
-      dbTickers.filter(_.name == name).map(_.copy(active = "D"))
+  def merge(wikiCompanies: Seq[Constituent], dbCompanies: Seq[Company]) {
+    val wikiRics = wikiCompanies.map(_.ric).toSet
+    val dbRics = dbCompanies.map(_.ric).toSet
+    val wikiRicsToAdd = wikiRics -- dbRics
+    val dbRicsToDisable = dbRics -- wikiRics
+    val companiesToAdd = wikiRicsToAdd.flatMap { ric =>
+      wikiCompanies.filter(_.ric == ric).map(t =>
+        Company(name = t.name, ric = t.ric, cik = Some(t.cik), lastFundumentalUpdate = new LocalDate(1970,1,1)))
+    }.toSeq
+    val companiesToRemove = dbRicsToDisable.flatMap { ric =>
+      dbCompanies.filter(_.ric == ric).map(_.copy(active = "D"))
     }
 
-    println(s"wikiNamesToAdd: $tickersToAdd")
-    println(s"dbNamesToDisable: $tickersToRemove")
-    symbolDAO.saveAllSymbols(tickersToAdd)
-    tickersToRemove.foreach(symbolDAO.updateSymbol(_))
+    println(s"companiesToAdd: $companiesToAdd")
+    println(s"companiesToDisable: $companiesToRemove")
+    companyDAO.saveAllCompanies(companiesToAdd)
+    companiesToRemove.foreach(companyDAO.updateCompany)
   }
 
 }

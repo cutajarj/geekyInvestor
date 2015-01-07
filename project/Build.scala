@@ -9,7 +9,9 @@ object ApplicationBuild extends Build {
     val appVersion      = "1.0-SNAPSHOT"
 
     val appDependencies = Seq(
-      "org.mongodb" % "mongo-java-driver" % "2.7.3"
+      "org.mongodb" % "mongo-java-driver" % "2.7.3",
+      "org.scalaj" %% "scalaj-http" % "0.3.14",
+      "commons-net" % "commons-net" % "3.2"
     )
 
     val main = play.Project(appName, appVersion, appDependencies).settings(

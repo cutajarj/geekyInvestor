@@ -4,11 +4,13 @@ import java.text.SimpleDateFormat
 import scala.xml.XML
 import java.util.Date
 import java.text.DecimalFormat
-import java.io.{FileOutputStream, File, PrintWriter}
-import persistance.{StatDAOImpl, SymbolDAOImpl, SymbolDAO}
-import com.mongodb.{BasicDBObject, MongoURI}
+import java.io.{ FileOutputStream, File, PrintWriter }
+import persistance.{ StatDAOImpl, SymbolDAOImpl, SymbolDAO }
+import com.mongodb.{ BasicDBObject, MongoURI }
 import org.joda.time.LocalDate
-
+import scala.util.Try
+import scalaj.http.Http
+import scalaj.http.HttpOptions
 
 /**
  * Created by IntelliJ IDEA.
@@ -28,9 +30,10 @@ object YChartsScanner {
   val sPattern = """(-?[0-9]+(\.[0-9][0-9]*)?)""".r
 
   val mongoDB = {
+    System.setProperty("MONGOHQ_URL", "mongodb://127.0.0.1:27017/geekInvestor")
     val mongoURI = new MongoURI(System.getProperty("MONGOHQ_URL"))
     val db = mongoURI.connectDB()
-    Option(mongoURI.getUsername).foreach(username=>db.authenticate(username, mongoURI.getPassword))
+    Option(mongoURI.getUsername).foreach(username => db.authenticate(username, mongoURI.getPassword))
     val index = new BasicDBObject()
     index.put("t", 1)
     index.put("s", 1)
@@ -44,21 +47,11 @@ object YChartsScanner {
   val months = Map[String, String]("Jan." -> "Jan", "Feb." -> "Feb", "March" -> "Mar", "April" -> "Apr", "May" -> "May", "June" -> "Jun", "July" -> "Jul",
     "Aug." -> "Aug", "Sept." -> "Sep", "Oct." -> "Oct", "Nov." -> "Nov", "Dec." -> "Dec")
 
-  def readDataFor(sym: String, t: (String,String)) = {
-    val dbLatest = statDAO.loadLatest(t._2,sym)
-    val latestDate = LocalDate.fromDateFields(dbLatest.timeStamp).plusDays(1)
+  def readDataFor(sym: String, t: (String, String)) = {
     val today = LocalDate.now()
-    val url = "http://ycharts.com/companies/%s/historical_data/%s?start_month=%s&start_day=%s&start_year=%s&end_month=%s&end_day=%s&end_year=%s".format(sym, t._1,
-      latestDate.getMonthOfYear,
-      latestDate.getDayOfMonth,
-      latestDate.getYear,
-      today.getMonthOfYear,
-      today.getDayOfMonth,
-      today.getYear
-      )
+    val url = "http://ycharts.com/companies/%s/%s".format(sym, t._1)
     println(url)
     val input = read(url)
-    //val input = read("http://ycharts.com/companies/%s/historical_data/%s?start_month=4&start_day=3&start_year=2002&end_month=6&end_day=3&end_year=2012".format(sym, t))
     val stuff = input.getLines.foldLeft("") {
       (s, l) =>
         (s, l) match {
@@ -67,13 +60,15 @@ object YChartsScanner {
           case _ => s
         }
     }
-    val nameValues = (XML.loadString(stuff) \\ "td").map(_.text)
-    val nameValueMap = nameValues.foldLeft((Seq[(Date, Double)](), (""))) { (ms, c) =>
+    val nameValues = (XML.loadString(stuff.replace("&nbsp;", "")) \\ "td").map(_.text.trim)
+    val indexTake = nameValues.indexWhere(_.contains("Upgrade")) - 1
+    val nameValuesSliced = if (indexTake>=0) nameValues.take(indexTake) else nameValues
+    val nameValueMap = nameValuesSliced.foldLeft((Seq[(Date, Double)](), (""))) { (ms, c) =>
       (ms, c) match {
         case ((m, ""), c) => (m, c)
         case ((m, x), c) =>
           parseDouble(c) match {
-            case Some(d) => (m :+(parseDate(x), d), "")
+            case Some(d) => (m :+ (parseDate(x), d), "")
             case None => (m, "")
           }
       }
@@ -83,12 +78,24 @@ object YChartsScanner {
   }
 
   def main(args: Array[String]) = {
+
     val pw = new PrintWriter(new FileOutputStream(new File("output.txt"), true))
-    val ts = Seq[(String, String)](("eps_ttm", "EPSTTM"), ("book_value_per_share", "BVPS"), /*("shares_outstanding", "SO"),*/ ("revenues_ttm", "RTTM"),("net_income_ttm", "NITTM"), ("gross_profit_ttm", "GPTTM") /*,("revenue_per_share", "RPSTTM")*/)
+    val ts = Seq[(String, String)](("eps_ttm", "EPSTTM"), ("book_value_per_share", "BVPS"), ("shares_outstanding", "SO"), ("revenues_ttm", "RTTM"), ("net_income_ttm", "NITTM"), ("gross_profit_ttm", "GPTTM") /*,("revenue_per_share", "RPSTTM")*/ )
     //val x = io.Source.fromFile("snp500.txt")
     val symbolDAO = new SymbolDAOImpl(mongoDB)
     val symbols = symbolDAO.loadAllStockTickers()
-    symbols.foreach { s =>
+    
+    /*val proxyHost = Option(System.getProperty("http.proxyHost"))
+    val proxyPort = Option(System.getProperty("http.proxyPort")).map(_.toInt)
+    println(proxyHost)
+    println(proxyPort)
+    val httpRequest = Http.get("http://ycharts.com/companies/GWW/eps_ttm")
+    val http = (for (h <- proxyHost; p <- proxyPort) yield (httpRequest.proxy(h,p))).getOrElse(httpRequest).option(HttpOptions.readTimeout(10000))
+    
+    println(http.proxy)
+    println(http.asString)*/
+
+    symbols.headOption.foreach { s =>
       ts.foreach { t =>
         val listOfData = readDataFor(s.name, t)
         val df = new DecimalFormat("#.###")
@@ -98,6 +105,17 @@ object YChartsScanner {
         }
       }
     }
+
+    /*symbols.foreach { s =>
+      ts.foreach { t =>
+        val listOfData = readDataFor(s.name, t)
+        val df = new DecimalFormat("#.###")
+        listOfData.foreach { data =>
+          pw.println("%s,%s,%s,%s".format(s.name, t._2, df.format(data._2), sdf2.format(data._1)))
+          pw.flush()
+        }
+      }
+    }*/
     pw.close()
   }
 
@@ -118,3 +136,4 @@ object YChartsScanner {
   }
 
 }
+
